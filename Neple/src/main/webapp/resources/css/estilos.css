@@ -1,0 +1,41 @@
+@CHARSET "UTF-8";
+
+.ui-widget, .ui-widget .ui-widget {
+	font-size: 100%;
+}
+
+#geral {
+	margin-left: auto;
+	margin-right: auto;
+	width: 1200px;
+	/*height: 600px;*/
+}
+
+#topo {
+	/*background-color: gray;
+	color: white;*/
+	text-align: center;
+	padding: 5px;
+}
+
+#menu {
+	/* 	line-height: 30px; */
+	background-color: #ffffff;
+	height: 600px;
+	width: 200px;
+	float: left;
+	padding: 5px;
+}
+
+#conteudo {
+	padding: 5px;
+}
+
+#rodape {
+	/* 	background-color: black; */
+	/* 	color: white; */
+	/* 	clear: both; */
+	/* 	text-align: center; */
+	/* 	padding: 5px; */
+	
+}

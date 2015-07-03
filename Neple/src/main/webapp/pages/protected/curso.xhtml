@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="/WEB-INF/templates/modeloProtected.xhtml">
+
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewAction action="#{cursoBean.listar}" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmPesquisa">
+			<p:dataTable id="tblPesquisa" widgetVar="wvTblPesquisa"
+				value="#{cursoBean.cursos}" var="curso" paginator="true" rows="7"
+				emptyMessage="Nenhum registro encontrado." tableStyle="table-layout: auto;">
+				<p:column headerText="Fatec" filterBy="#{curso.fatec.nome}"
+					sortBy="#{curso.fatec.nome}">
+					#{curso.fatec.nome}
+				</p:column>
+
+				<p:column headerText="Curso" filterBy="#{curso.curso}"
+					sortBy="#{curso.curso}">
+					#{curso.curso}
+				</p:column>
+
+				<p:column headerText="Período" filterBy="#{curso.periodo}"
+					sortBy="#{curso.periodo}" style="text-align: center;">
+					#{curso.periodo}
+				</p:column>
+
+				<p:column headerText="Opções"
+					style="text-align: center;">
+					<p:commandButton icon="ui-icon-trash"
+						actionListener="#{cursoBean.excluir}"
+						update=":msgGlobal :frmPesquisa:tblPesquisa"
+						oncomplete="manipularPedidoExcluir(xhr, status, args);">
+						<f:attribute name="codigo" value="#{curso.codigo}" />
+						<p:confirm header="Confirmação"
+							message="Deseja excluir o curso selecionado?"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+					<p:commandButton icon="ui-icon-pencil"
+						actionListener="#{cursoBean.editar}"
+						oncomplete="PF('dlgCadastro').show();"
+						update=":frmCadastro:pnlCadastro">
+						<f:attribute name="codigo" value="#{curso.codigo}" />
+					</p:commandButton>
+				</p:column>
+
+				<f:facet name="header">
+					<p:commandButton value="Novo" actionListener="#{cursoBean.novo}"
+						icon="ui-icon-plus" oncomplete="PF('dlgCadastro').show();"
+						update=":frmCadastro:pnlCadastro" />
+				</f:facet>
+			</p:dataTable>
+
+			<p:confirmDialog id="dlgConfirmacao" global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check">
+				</p:commandButton>
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+
+		<p:dialog widgetVar="dlgCadastro" modal="true" appendTo="@(body)"
+			closable="true" draggable="false" resizable="false"
+			header="Curso - Cadastro">
+			<h:form id="frmCadastro">
+				<h:panelGrid id="pnlCadastro" columns="2">
+					<p:outputLabel value="Fatec: *" />
+					<p:selectOneMenu value="#{cursoBean.curso.fatec}"
+						converter="omnifaces.SelectItemsConverter" filter="true"
+						filterMatchMode="contains">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione uma Fatec" />
+						<f:selectItems value="#{cursoBean.fatecs}" var="fatec"
+							itemValue="#{fatec}" itemLabel="#{fatec.nome}" />
+					</p:selectOneMenu>
+					
+					<p:outputLabel value="Curso: *" />
+					<p:inputText maxlength="100" size="50"
+						value="#{cursoBean.curso.curso}" converter="toUpperCaseConverter">
+						<pe:keyFilter regEx="/[a-z\s]/i" />
+						<p:ajax event="blur" update="@this" global="false" />
+					</p:inputText>
+					
+					<p:outputLabel value="Período: *" />
+					<p:selectOneRadio value="#{cursoBean.curso.periodo}">
+						<f:selectItem itemValue="M" itemLabel="Matutino" />
+						<f:selectItem itemValue="V" itemLabel="Vespertino" />
+						<f:selectItem itemValue="N" itemLabel="Noturno" />
+					</p:selectOneRadio>
+					
+					<p:outputLabel value="Número de Vagas: *" />
+					<p:inputText maxlength="3" size="10"
+						value="#{cursoBean.curso.numeroVagas}">
+						<pe:keyFilter regEx="/[\d]/" />
+					</p:inputText>
+					
+					<p:outputLabel value="Carga Horário de Espanhol: *" />
+					<p:inputText maxlength="3" size="10"
+						value="#{cursoBean.curso.cargaHorariaEspanhol}">
+						<pe:keyFilter regEx="/[\d]/" />
+					</p:inputText>
+					
+					<p:outputLabel value="Carga Horário de Inglês: *" />
+					<p:inputText maxlength="3" size="10"
+						value="#{cursoBean.curso.cargaHorariaIngles}">
+						<pe:keyFilter regEx="/[\d]/" />
+					</p:inputText>
+					
+					<p:outputLabel value="Código do Curso no SIGA: *" />
+					<p:inputText maxlength="10" size="15"
+						value="#{cursoBean.curso.codigoCursoSIGA}">
+						<pe:keyFilter regEx="/[\d]/" />
+					</p:inputText>
+					
+					<p:outputLabel value="Código do Turno no SIGA: *" />
+					<p:inputText maxlength="10" size="15"
+						value="#{cursoBean.curso.codigoTurnoSIGA}">
+						<pe:keyFilter regEx="/[\d]/" />
+					</p:inputText>				
+
+					<p:outputLabel value="Ativo: *" />
+					<p:selectBooleanCheckbox value="#{cursoBean.curso.ativo}" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="1">
+					<p:commandButton value="Salvar"
+						actionListener="#{cursoBean.salvar}"
+						update=":msgGlobal :frmCadastro:pnlCadastro :frmPesquisa:tblPesquisa"
+						icon="ui-icon-disk"
+						oncomplete="manipularPedidoSalvar(xhr, status, args)">
+					</p:commandButton>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

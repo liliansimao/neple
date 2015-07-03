@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="/WEB-INF/templates/modeloPublic.xhtml">
+
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewAction action="#{autenticacaoBean.iniciar}" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<p:dialog id="dialogo" header="Autenticação" closable="false"
+			draggable="false" resizable="false" visible="true">
+			<h:form>
+				<h:panelGrid columns="2">
+					<p:outputLabel value="E-mail: *" />
+					<p:inputText value="#{autenticacaoBean.usuario.email}" />
+
+					<p:outputLabel value="Senha: *" />
+					<p:password value="#{autenticacaoBean.usuario.senha}" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Entrar" action="#{autenticacaoBean.autenticar}" />
+					<p:button value="Primeiro Acesso"
+						outcome="pretty:primeiroacesso" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

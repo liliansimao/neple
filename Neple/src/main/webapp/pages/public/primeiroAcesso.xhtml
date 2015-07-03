@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="/WEB-INF/templates/modeloPublic.xhtml">
+
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewAction action="#{primeiroAcessoBean.novo}" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="formulario">
+			<p:panel header="Primeiro Acesso">
+				<h:panelGrid id="painel" columns="2">
+					<p:outputLabel value="Nome: *" />
+					<p:inputText value="#{primeiroAcessoBean.usuario.nome}"
+						maxlength="80" size="50" converter="toUpperCaseConverter">
+						<pe:keyFilter regEx="/[a-z\s]/i" />
+						<p:ajax event="blur" update="@this" global="false" />
+					</p:inputText>
+
+					<p:outputLabel value="Fatec: *" />
+					<p:selectOneMenu id="cbFatec"
+						value="#{primeiroAcessoBean.usuario.fatec}"
+						converter="omnifaces.SelectItemsConverter" filter="true">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione uma Fatec" />
+						<f:selectItems value="#{primeiroAcessoBean.fatecs}" var="fatec"
+							itemValue="#{fatec}" itemLabel="#{fatec.nome}" />
+						<p:ajax event="change"
+							listener="#{primeiroAcessoBean.buscarCursos}"
+							update=":formulario:cbCursos" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="E-Mail: *" />
+					<p:inputText value="#{primeiroAcessoBean.usuario.email}"
+						maxlength="130" size="50" converter="toLowerCaseConverter">
+						<pe:keyFilter regEx="/[a-z0-9_\.\-@]/i" />
+						<p:ajax event="blur" update="@this" global="false" />
+					</p:inputText>
+
+					<p:outputLabel value="Senha: *" />
+					<p:password id="txtSenhaAluno" maxlength="8" size="10"
+						value="#{primeiroAcessoBean.usuario.senha}" redisplay="true"
+						match="txtConfirmacaoSenhaAluno" />
+
+					<p:outputLabel value="Confirmação da Senha: *" />
+					<p:password id="txtConfirmacaoSenhaAluno" maxlength="8" size="10"
+						value="#{primeiroAcessoBean.usuario.confirmacaoSenha}"
+						redisplay="true" />
+
+					<p:outputLabel value="Tipo do Usuário: *" />
+					<p:selectOneRadio id="radTipoUsuario"
+						value="#{primeiroAcessoBean.usuario.tipoUsuario}">
+						<f:selectItem itemValue="A" itemLabel="Aluno" />
+						<f:selectItem itemValue="P" itemLabel="Professor" />
+						<f:selectItem itemValue="C" itemLabel="Coordenador" />
+						<f:selectItem itemValue="D" itemLabel="Diretor" />
+						<f:selectItem itemValue="S" itemLabel="Secretária" />
+						<f:selectItem itemValue="L" itemLabel="Laboratório de Informática" />
+						<p:ajax event="change"
+							update=":formulario:painelProfessor :formulario:painelAluno" />
+						<p:ajax event="change"
+							listener="#{primeiroAcessoBean.buscarCursos}"
+							update=":formulario:cbCursos" />
+					</p:selectOneRadio>
+				</h:panelGrid>
+
+				<p:outputPanel id="painelProfessor">
+					<p:separator rendered="#{primeiroAcessoBean.ehProfessor()}" />
+					<h:panelGrid columns="2"
+						rendered="#{primeiroAcessoBean.ehProfessor()}">
+						<p:outputLabel value="Apresentação: *" />
+						<p:inputTextarea
+							value="#{primeiroAcessoBean.professor.apresentacao}"
+							maxlength="500" cols="50" rows="3" autoResize="false"
+							converter="toUpperCaseConverter">
+							<pe:keyFilter regEx="/[a-z\s]/i" />
+							<p:ajax event="blur" update="@this" global="false" />
+						</p:inputTextarea>
+
+						<p:outputLabel value="Telefone de Contato: *" />
+						<h:panelGroup>
+							<p:inputText
+								value="#{primeiroAcessoBean.professor.telefoneContato}"
+								maxlength="12" size="15">
+								<pe:keyFilter regEx="/[\d]/" />
+							</p:inputText>
+							<h:outputText value=" (Somente números)" />
+						</h:panelGroup>
+
+						<p:outputLabel value="Idioma: *" />
+						<p:selectOneRadio
+							value="#{primeiroAcessoBean.professor.idioma}">
+							<f:selectItem itemValue="I" itemLabel="Inglês" />
+							<f:selectItem itemValue="E" itemLabel="Espanhol" />
+						</p:selectOneRadio>
+					</h:panelGrid>
+				</p:outputPanel>
+
+				<p:outputPanel id="painelAluno">
+					<p:separator rendered="#{primeiroAcessoBean.ehAluno()}" />
+					<h:panelGrid columns="2" rendered="#{primeiroAcessoBean.ehAluno()}">
+						<p:outputLabel value="RA: *" />
+						<p:inputText value="#{primeiroAcessoBean.aluno.ra}"
+							maxlength="11" size="15">
+							<pe:keyFilter regEx="/[\d]/" />
+						</p:inputText>
+
+						<p:outputLabel value="CPF: *" />
+						<h:panelGroup>
+							<p:inputText value="#{primeiroAcessoBean.aluno.cpf}"
+								maxlength="11" size="15">
+								<pe:keyFilter regEx="/[\d]/" />
+							</p:inputText>
+							<h:outputText value=" (Somente números)" />
+						</h:panelGroup>
+
+						<p:outputLabel value="Curso: *" />
+						<p:selectOneMenu id="cbCursos"
+							value="#{primeiroAcessoBean.aluno.curso}"
+							converter="omnifaces.SelectItemsConverter" filter="true">
+							<f:selectItem noSelectionOption="true"
+								itemLabel="Selecione um Curso" />
+							<f:selectItems value="#{primeiroAcessoBean.cursos}" var="curso"
+								itemValue="#{curso}"
+								itemLabel="#{curso.curso} (#{curso.periodoPorExtenso})" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</p:outputPanel>
+			</p:panel>
+
+			<p:separator />
+			<h:panelGrid columns="2">
+				<p:commandButton value="Salvar"
+					actionListener="#{primeiroAcessoBean.salvar}"
+					update=":mensagem :formulario:painel :formulario:painelProfessor :formulario:painelAluno" />
+				<p:button value="Voltar" outcome="pretty:autenticacao" />
+			</h:panelGrid>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>

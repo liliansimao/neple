@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<pretty-config xmlns="http://ocpsoft.org/schema/rewrite-config-prettyfaces"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://ocpsoft.org/schema/rewrite-config-prettyfaces
+                      http://ocpsoft.org/xml/ns/prettyfaces/rewrite-config-prettyfaces.xsd">
+
+	<url-mapping id="fatec">
+		<pattern value="/fatec" />
+		<view-id value="/pages/protected/fatec.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="curso">
+		<pattern value="/curso" />
+		<view-id value="/pages/protected/curso.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="autenticacao">
+		<pattern value="/autenticacao" />
+		<view-id value="/pages/public/autenticacao.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="primeiroacesso">
+		<pattern value="/primeiroacesso" />
+		<view-id value="/pages/public/primeiroAcesso.xhtml" />
+	</url-mapping>
+
+</pretty-config>

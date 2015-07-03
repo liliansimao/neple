@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+	<session-factory>
+
+		<!-- Configurações da conexão -->
+		<property name="connection.driver_class">org.postgresql.Driver</property>
+		<property name="connection.url">jdbc:postgresql://127.0.0.1:5432/neple</property>
+		<property name="connection.username">postgres</property>
+		<property name="connection.password">q1w2e3r4</property>
+<!-- 		<property name="connection.url">jdbc:postgresql://postgres51311-teste123.jelasticlw.com.br:5432/neple</property> -->
+<!-- 		<property name="connection.username">webadmin</property> -->
+<!-- 		<property name="connection.password">ATwmcCsGTk</property> -->
+
+		<!-- Pool de conexões JDBC -->
+		<property name="hibernate.c3p0.min_size">5</property>
+		<property name="hibernate.c3p0.max_size">20</property>
+		<property name="hibernate.c3p0.timeout">300</property>
+		<property name="hibernate.c3p0.max_statements">50</property>
+		<property name="hibernate.c3p0.idle_test_period">3000</property>
+
+		<!-- Dialeto SQL -->
+		<property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+		<!-- Exibe os comandos SQL -->
+		<property name="show_sql">true</property>
+		<property name="format_sql">true</property>
+
+		<!-- Cria as tabelas -->
+		<property name="hbm2ddl.auto">update</property>
+
+		<!-- Classes mapeadas -->	
+		<mapping class="br.com.neple.domain.Fatec" />
+		<mapping class="br.com.neple.domain.Curso" />
+		<mapping class="br.com.neple.domain.Usuario" />
+		<mapping class="br.com.neple.domain.Aluno" />
+		<mapping class="br.com.neple.domain.Professor" />
+	</session-factory>
+</hibernate-configuration>

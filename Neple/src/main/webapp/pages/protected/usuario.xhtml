@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="/WEB-INF/templates/modelo.xhtml">
+
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewAction action="#{usuarioBean.listar}" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmPesquisa">
+			<p:dataTable id="tblPesquisa" widgetVar="wvTblPesquisa"
+				value="#{usuarioBean.usuarios}" var="usuario" paginator="true"
+				rows="7" emptyMessage="Nenhum registro encontrado."
+				tableStyle="table-layout: auto;">
+				<p:column headerText="Nome" filterBy="#{usuario.nome}"
+					sortBy="#{curso.fatec.nome}">
+					#{usuario.nome}
+				</p:column>
+
+				<p:column headerText="E-Mail" filterBy="#{usuario.email}"
+					sortBy="#{usuario.email}">
+					#{usuario.email}
+				</p:column>
+
+				<p:column headerText="Tipo"
+					filterBy="#{usuario.tipoUsuario.descricao}"
+					sortBy="#{usuario.tipoUsuario.descricao}">
+					#{usuario.tipoUsuario.descricao}
+				</p:column>
+
+				<p:column headerText="Opções" style="text-align: center;">
+					<p:commandButton icon="ui-icon-trash"
+						actionListener="#{usuarioBean.excluir}" 
+						update=":msgGlobal :frmPesquisa:tblPesquisa"
+						oncomplete="manipularPedidoExcluir(xhr, status, args);">
+						<f:attribute name="usuario" value="#{usuario}" />
+						<p:confirm header="Confirmação"
+							message="Deseja excluir o usuário selecionado?"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+					<p:commandButton icon="ui-icon-pencil"
+						actionListener="#{usuarioBean.editar}"
+						oncomplete="PF('dlgCadastro').show();"
+						update=":frmCadastro:pnlCadastro">
+						<f:attribute name="usuario" value="#{usuario}" />
+					</p:commandButton>
+				</p:column>
+
+				<f:facet name="header">
+					<p:commandButton value="Novo" actionListener="#{usuarioBean.novo}"
+						icon="ui-icon-plus" oncomplete="PF('dlgCadastro').show();"
+						update=":frmCadastro:pnlCadastro" />
+				</f:facet>
+			</p:dataTable>
+
+			<p:confirmDialog id="dlgConfirmacao" global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check">
+				</p:commandButton>
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+
+		<p:dialog widgetVar="dlgCadastro" modal="true" appendTo="@(body)"
+			closable="true" draggable="false" resizable="false"
+			header="Curso - Cadastro">
+			<h:form id="frmCadastro">
+				<h:panelGrid id="pnlCadastro" columns="2">
+					<p:outputLabel value="Nome:" />
+					<p:inputText maxlength="50" size="30"
+						value="#{usuarioBean.usuario.nome}">
+						<f:validateBean />
+					</p:inputText>
+
+					<p:outputLabel value="E-Mail:" />
+					<p:inputText maxlength="100" size="70"
+						value="#{usuarioBean.usuario.email}">
+						<f:validateBean />
+					</p:inputText>
+
+					<p:outputLabel value="Senha:" />
+					<p:password id="txtSenha" maxlength="8" size="10"
+						value="#{usuarioBean.usuario.senha}" redisplay="true" match="txtConfirmacaoSenha">
+						<f:validateBean />
+					</p:password>
+
+					<p:outputLabel value="Confirmação da Senha:" />
+					<p:password id="txtConfirmacaoSenha" maxlength="8" size="10"
+						value="#{usuarioBean.usuario.confirmacaoSenha}" redisplay="true">
+						<f:validateBean />
+					</p:password>
+
+					<p:outputLabel value="Tipo do Usuário:" />
+					<p:selectOneRadio value="#{usuarioBean.usuario.tipoUsuario}">
+						<f:selectItems value="#{usuarioBean.tiposUsuario}"
+							var="tipoUsuario" itemValue="#{tipoUsuario}"
+							itemLabel="#{tipoUsuario.descricao}" />
+						<f:validateBean />
+					</p:selectOneRadio>
+
+					<p:outputLabel value="Idioma:" />
+					<p:selectOneRadio value="#{usuarioBean.usuario.idioma}">
+						<f:selectItems value="#{usuarioBean.idiomas}"
+							var="idioma" itemValue="#{idioma}"
+							itemLabel="#{idioma.descricao}" />
+						<f:validateBean />
+					</p:selectOneRadio>
+
+					<p:outputLabel value="Fatec:" />
+					<p:selectOneMenu value="#{usuarioBean.usuario.fatec}"
+						converter="omnifaces.SelectItemsConverter" filter="true"
+						filterMatchMode="contains">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione uma Fatec" />
+						<f:selectItems value="#{usuarioBean.fatecs}" var="fatec"
+							itemValue="#{fatec}" itemLabel="#{fatec.nome}" />
+						<f:validateBean />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Ativo:" />
+					<p:selectBooleanCheckbox value="#{usuarioBean.usuario.ativo}" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="1">
+					<p:commandButton value="Salvar"
+						actionListener="#{usuarioBean.salvar}"
+						update=":msgGlobal :frmCadastro:pnlCadastro :frmPesquisa:tblPesquisa"
+						icon="ui-icon-disk"
+						oncomplete="manipularPedidoSalvar(xhr, status, args)">
+					</p:commandButton>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

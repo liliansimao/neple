@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+	<h:form id="frmMenu">
+		<p:panelMenu id="menuPrincipal">
+			<p:submenu id="menuArquivo" label="Arquivo">
+				<p:menuitem id="menuItemPrincipal" value="Principal"
+					outcome="/pages/protected/principal.xhtml" />
+				<p:menuitem id="menuItemSair" value="Sair"
+					outcome="/pages/public/autenticacao.xhtml" />
+			</p:submenu>
+
+			<p:submenu id="menuCadastros" label="Cadastros">
+				<p:menuitem id="menuItemUsuario" value="Usuário"
+					outcome="/pages/protected/usuario.xhtml" />
+				<p:menuitem id="menuItemAluno" value="Aluno" />
+				<p:menuitem id="menuItemProfessor" value="Professor" />
+				<p:menuitem id="menuItemCurso" value="Curso"
+					outcome="/pages/protected/curso.xhtml" />
+				<p:menuitem id="menuItemFatec" value="Fatec"
+					outcome="/pages/protected/fatec.xhtml" />
+			</p:submenu>
+		</p:panelMenu>
+	</h:form>
+</ui:composition>
