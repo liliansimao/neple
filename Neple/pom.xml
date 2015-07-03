@@ -149,6 +149,27 @@
 			<artifactId>rewrite-config-prettyfaces</artifactId>
 			<version>2.0.12.Final</version>
 		</dependency>
+		
+		<!-- Apache Shiro Core -->
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-core</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+
+		<!-- Apache Shiro Web -->
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-web</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+		
+		<!-- Commons Logging -->
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.2</version>
+		</dependency>
 
 		<!-- Commons Lang -->
 		<dependency>

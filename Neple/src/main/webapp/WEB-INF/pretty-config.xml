@@ -5,6 +5,11 @@
 	xsi:schemaLocation="http://ocpsoft.org/schema/rewrite-config-prettyfaces
                       http://ocpsoft.org/xml/ns/prettyfaces/rewrite-config-prettyfaces.xsd">
 
+	<url-mapping id="principal">
+		<pattern value="/principal" />
+		<view-id value="/pages/protected/principal.xhtml" />
+	</url-mapping>
+
 	<url-mapping id="fatec">
 		<pattern value="/fatec" />
 		<view-id value="/pages/protected/fatec.xhtml" />

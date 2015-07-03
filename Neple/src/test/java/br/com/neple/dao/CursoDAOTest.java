@@ -1,6 +1,5 @@
 package br.com.neple.dao;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 

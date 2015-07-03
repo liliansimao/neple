@@ -10,19 +10,15 @@
 			<p:submenu id="menuArquivo" label="Arquivo">
 				<p:menuitem id="menuItemPrincipal" value="Principal"
 					outcome="/pages/protected/principal.xhtml" />
-				<p:menuitem id="menuItemSair" value="Sair"
-					outcome="/pages/public/autenticacao.xhtml" />
+				<p:menuitem id="menuItemSair" value="Sair" />
 			</p:submenu>
 
 			<p:submenu id="menuCadastros" label="Cadastros">
-				<p:menuitem id="menuItemUsuario" value="Usuário"
-					outcome="/pages/protected/usuario.xhtml" />
+				<p:menuitem id="menuItemUsuario" value="Usuário" />
 				<p:menuitem id="menuItemAluno" value="Aluno" />
 				<p:menuitem id="menuItemProfessor" value="Professor" />
-				<p:menuitem id="menuItemCurso" value="Curso"
-					outcome="/pages/protected/curso.xhtml" />
-				<p:menuitem id="menuItemFatec" value="Fatec"
-					outcome="/pages/protected/fatec.xhtml" />
+				<p:menuitem id="menuItemCurso" value="Curso" outcome="pretty:curso" />
+				<p:menuitem id="menuItemFatec" value="Fatec" outcome="pretty:fatec" />
 			</p:submenu>
 		</p:panelMenu>
 	</h:form>

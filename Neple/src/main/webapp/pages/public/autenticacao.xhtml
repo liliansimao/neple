@@ -7,12 +7,6 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	template="/WEB-INF/templates/modeloPublic.xhtml">
 
-	<ui:define name="metadata">
-		<f:metadata>
-			<f:viewAction action="#{autenticacaoBean.iniciar}" />
-		</f:metadata>
-	</ui:define>
-
 	<ui:define name="conteudo">
 		<p:dialog id="dialogo" header="Autenticação" closable="false"
 			draggable="false" resizable="false" visible="true">
@@ -26,9 +20,10 @@
 				</h:panelGrid>
 
 				<h:panelGrid columns="2">
-					<p:commandButton value="Entrar" action="#{autenticacaoBean.autenticar}" />
-					<p:button value="Primeiro Acesso"
-						outcome="pretty:primeiroacesso" />
+					<p:commandButton value="Entrar"
+						actionListener="#{autenticacaoBean.autenticar}"
+						update=":mensagem" />
+					<p:button value="Primeiro Acesso" outcome="pretty:primeiroacesso" />
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>
