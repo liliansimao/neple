@@ -14,6 +14,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import br.com.neple.enumeracao.Periodo;
+
 @SuppressWarnings("serial")
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "fatec_codigo",
@@ -27,7 +29,7 @@ public class Curso extends GenericDomain {
 
 	@Basic(optional = false)
 	@NotNull(message = "O campo PERÍODO é obrigatório")
-	private Character periodo = 'M';
+	private Character periodo;
 	
 	@Transient
 	private String periodoPorExtenso;
@@ -54,7 +56,7 @@ public class Curso extends GenericDomain {
 
 	@Basic(optional = false)
 	@NotNull(message = "O campo ATIVO é obrigatório")
-	private Boolean ativo = Boolean.TRUE;
+	private Boolean ativo;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(nullable = false)
@@ -138,15 +140,6 @@ public class Curso extends GenericDomain {
 	}
 	
 	public String getPeriodoPorExtenso(){
-		switch (periodo) {
-		case 'M':
-			return "Matutino";
-		case 'V':
-			return "Vespertino";
-		case 'N':
-			return "Noturno";
-		default:
-			return null;
-		}
+		return Periodo.getValue(this.periodo).getDescricao();
 	}
 }

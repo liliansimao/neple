@@ -18,7 +18,8 @@
 		<h:form id="frmPesquisa">
 			<p:dataTable id="tblPesquisa" widgetVar="wvTblPesquisa"
 				value="#{cursoBean.cursos}" var="curso" paginator="true" rows="7"
-				emptyMessage="Nenhum registro encontrado." tableStyle="table-layout: auto;">
+				emptyMessage="Nenhum registro encontrado."
+				tableStyle="table-layout: auto;">
 				<p:column headerText="Fatec" filterBy="#{curso.fatec.nome}"
 					sortBy="#{curso.fatec.nome}">
 					#{curso.fatec.nome}
@@ -34,8 +35,7 @@
 					#{curso.periodo}
 				</p:column>
 
-				<p:column headerText="Opções"
-					style="text-align: center;">
+				<p:column headerText="Opções" style="text-align: center;">
 					<p:commandButton icon="ui-icon-trash"
 						actionListener="#{cursoBean.excluir}"
 						update=":msgGlobal :frmPesquisa:tblPesquisa"
@@ -83,55 +83,53 @@
 						<f:selectItems value="#{cursoBean.fatecs}" var="fatec"
 							itemValue="#{fatec}" itemLabel="#{fatec.nome}" />
 					</p:selectOneMenu>
-					
+
 					<p:outputLabel value="Curso: *" />
 					<p:inputText maxlength="100" size="50"
-						value="#{cursoBean.curso.curso}" converter="toUpperCaseConverter">
-						<pe:keyFilter regEx="/[a-z\s]/i" />
-						<p:ajax event="blur" update="@this" global="false" />
-					</p:inputText>
-					
+						value="#{cursoBean.curso.curso}" />
+
 					<p:outputLabel value="Período: *" />
 					<p:selectOneRadio value="#{cursoBean.curso.periodo}">
 						<f:selectItem itemValue="M" itemLabel="Matutino" />
 						<f:selectItem itemValue="V" itemLabel="Vespertino" />
 						<f:selectItem itemValue="N" itemLabel="Noturno" />
 					</p:selectOneRadio>
-					
+
 					<p:outputLabel value="Número de Vagas: *" />
 					<p:inputText maxlength="3" size="10"
 						value="#{cursoBean.curso.numeroVagas}">
 						<pe:keyFilter regEx="/[\d]/" />
 					</p:inputText>
-					
+
 					<p:outputLabel value="Carga Horário de Espanhol: *" />
 					<p:inputText maxlength="3" size="10"
 						value="#{cursoBean.curso.cargaHorariaEspanhol}">
 						<pe:keyFilter regEx="/[\d]/" />
 					</p:inputText>
-					
+
 					<p:outputLabel value="Carga Horário de Inglês: *" />
 					<p:inputText maxlength="3" size="10"
 						value="#{cursoBean.curso.cargaHorariaIngles}">
 						<pe:keyFilter regEx="/[\d]/" />
 					</p:inputText>
-					
+
 					<p:outputLabel value="Código do Curso no SIGA: *" />
 					<p:inputText maxlength="10" size="15"
 						value="#{cursoBean.curso.codigoCursoSIGA}">
 						<pe:keyFilter regEx="/[\d]/" />
 					</p:inputText>
-					
+
 					<p:outputLabel value="Código do Turno no SIGA: *" />
 					<p:inputText maxlength="10" size="15"
 						value="#{cursoBean.curso.codigoTurnoSIGA}">
 						<pe:keyFilter regEx="/[\d]/" />
-					</p:inputText>				
+					</p:inputText>
 
 					<p:outputLabel value="Ativo: *" />
 					<p:selectBooleanCheckbox value="#{cursoBean.curso.ativo}" />
 				</h:panelGrid>
 
+				<p:separator />
 				<h:panelGrid columns="1">
 					<p:commandButton value="Salvar"
 						actionListener="#{cursoBean.salvar}"

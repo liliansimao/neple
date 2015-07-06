@@ -7,15 +7,10 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
 import org.omnifaces.util.Faces;
 import org.omnifaces.util.Messages;
 
 import br.com.neple.domain.Usuario;
-import br.com.neple.util.Criptografia;
 
 @SuppressWarnings("serial")
 @Named
@@ -35,16 +30,16 @@ public class AutenticacaoBean implements Serializable {
 	}
 
 	public void autenticar() {
-		UsernamePasswordToken token = new UsernamePasswordToken(
-				usuario.getEmail(), Criptografia.cifrar(usuario.getSenha()));
+		//UsernamePasswordToken token = new UsernamePasswordToken(
+		//		usuario.getEmail(), Criptografia.cifrar(usuario.getSenha()));
 
-		Subject currentUser = SecurityUtils.getSubject();
+		// Subject currentUser = SecurityUtils.getSubject();
 
 		try {
-			currentUser.login(token);
+			// currentUser.login(token);
 			Faces.redirect("principal");
-		} catch (AuthenticationException authenticationException) {
-			Messages.addGlobalWarn("Usuário e/ou senha inválido(s)");
+		//} catch (AuthenticationException authenticationException) {
+		//	Messages.addGlobalWarn("Usuário e/ou senha inválido(s)");
 		} catch (IOException ioException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(ioException));

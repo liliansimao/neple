@@ -32,4 +32,13 @@ public enum TipoUsuario {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+	
+	public static TipoUsuario getValue(Character sigla){
+		for(TipoUsuario tipoUsuario : values()){
+			if(tipoUsuario.getSigla() == sigla){
+				return tipoUsuario;
+			}
+		}
+		return null;	
+	}
 }

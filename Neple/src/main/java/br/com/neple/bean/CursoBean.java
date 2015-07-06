@@ -17,6 +17,7 @@ import br.com.neple.dao.FatecDAO;
 import br.com.neple.domain.Curso;
 import br.com.neple.domain.Fatec;
 import br.com.neple.enumeracao.Acao;
+import br.com.neple.enumeracao.Periodo;
 
 @SuppressWarnings("serial")
 @Named
@@ -63,7 +64,11 @@ public class CursoBean extends GenericBean {
 	public void novo() {
 		try {
 			this.acao = Acao.NOVO;
+			
 			this.curso = new Curso();
+			this.curso.setAtivo(Boolean.TRUE);
+			this.curso.setPeriodo(Periodo.MATUTINO.getSigla());
+			
 			this.fatecs = fatecDAO.listar();
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils

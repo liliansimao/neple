@@ -71,26 +71,20 @@
 				<h:panelGrid id="pnlCadastro" columns="2">
 					<p:outputLabel value="Nome: *" />
 					<p:inputText maxlength="50" size="30"
-						value="#{fatecBean.fatec.nome}" converter="toUpperCaseConverter">
-						<pe:keyFilter regEx="/[a-z\s]/i" />
-						<p:ajax event="blur" update="@this" global="false" />
-					</p:inputText>
-
+						value="#{fatecBean.fatec.nome}" converter="toUpperCaseConverter" />
+						
 					<p:outputLabel value="Cidade: *" />
 					<p:inputText maxlength="50" size="30"
-						value="#{fatecBean.fatec.cidade}" converter="toUpperCaseConverter">
-						<pe:keyFilter regEx="/[a-z\s]/i" />
-						<p:ajax event="blur" update="@this" global="false" />
-					</p:inputText>
-
+						value="#{fatecBean.fatec.cidade}" />
 
 					<p:outputLabel value="Código da Fatec no SIGA: *" />
 					<p:inputText maxlength="10" size="15"
 						value="#{fatecBean.fatec.codigoFatecSIGA}">
-						<pe:keyFilter regEx="/[\d\-]/" />
+						<pe:keyFilter regEx="/[\d]/" />
 					</p:inputText>
 				</h:panelGrid>
 
+				<p:separator />
 				<h:panelGrid columns="1">
 					<p:commandButton value="Salvar"
 						actionListener="#{fatecBean.salvar}"

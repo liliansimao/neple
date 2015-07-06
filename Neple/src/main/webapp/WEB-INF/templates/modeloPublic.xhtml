@@ -24,6 +24,20 @@
 		resizable="false" showHeader="false">
 		<p:graphicImage library="images" name="ajaxloadingbar.gif" />
 	</p:dialog>
+	
+	 <p:ajaxExceptionHandler type="javax.faces.application.ViewExpiredException"
+                            update="dlgErro"
+                            onexception="PF('dlgErroWV').show();" />
+ 
+    <p:dialog id="dlgErro" header="Exception '#{pfExceptionHandler.type}' occured!" widgetVar="dlgErroWV"
+              height="500px">
+        Message: #{pfExceptionHandler.message} <br/>
+        StackTrace: <h:outputText value="#{pfExceptionHandler.formattedStackTrace}" escape="false" /> <br />
+ 
+        <p:button onclick="document.location.href = document.location.href;"
+                  value="Reload!"
+                  rendered="#{pfExceptionHandler.type == 'javax.faces.application.ViewExpiredException'}" />
+    </p:dialog>
 
 	<div id="geral">
 		<div id="topo">

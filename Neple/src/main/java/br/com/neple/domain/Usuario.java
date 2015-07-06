@@ -23,6 +23,8 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import br.com.neple.enumeracao.TipoUsuario;
+
 @SuppressWarnings("serial")
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -49,16 +51,22 @@ public class Usuario extends GenericDomain {
 
 	@Basic(optional = false)
 	@NotNull(message = "O campo TIPO DO USUÁRIO é obrigatório")
-	private Character tipoUsuario = 'A';
+	private Character tipoUsuario;
+	
+	@Transient
+	private String tipoUsuarioExtenso;
 
 	@Basic(optional = false)
 	@NotNull(message = "O campo ATIVO é obrigatório")
-	private Boolean ativo = Boolean.FALSE;
+	private Boolean ativo;
+	
+	@Transient
+	private String ativoExtenso;
 
 	@Basic(optional = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@NotNull(message = "O campo DATA DE CRIAÇÃO é obrigatório")
-	private Date dataCriacao = new Date();
+	private Date dataCriacao;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(nullable = false)
@@ -112,6 +120,14 @@ public class Usuario extends GenericDomain {
 	public void setTipoUsuario(Character tipoUsuario) {
 		this.tipoUsuario = tipoUsuario;
 	}
+	
+	public void setTipoUsuarioExtenso(String tipoUsuarioExtenso) {
+		this.tipoUsuarioExtenso = tipoUsuarioExtenso;
+	}
+	
+	public String getTipoUsuarioExtenso() {
+		return TipoUsuario.getValue(this.tipoUsuario).getDescricao();
+	}
 
 	public Boolean getAtivo() {
 		return ativo;
@@ -119,6 +135,14 @@ public class Usuario extends GenericDomain {
 
 	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
+	}
+	
+	public String getAtivoExtenso() {
+		return (this.ativo ? "Sim" : "Não");
+	}
+	
+	public void setAtivoExtenso(String ativoExtenso) {
+		this.ativoExtenso = ativoExtenso;
 	}
 
 	public Date getDataCriacao() {

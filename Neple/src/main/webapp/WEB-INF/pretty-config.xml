@@ -11,13 +11,18 @@
 	</url-mapping>
 
 	<url-mapping id="fatec">
-		<pattern value="/fatec" />
+		<pattern value="/admin/fatec" />
 		<view-id value="/pages/protected/fatec.xhtml" />
 	</url-mapping>
 	
 	<url-mapping id="curso">
-		<pattern value="/curso" />
+		<pattern value="/admin/curso" />
 		<view-id value="/pages/protected/curso.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="usuario">
+		<pattern value="/admin/usuario" />
+		<view-id value="/pages/protected/usuario.xhtml" />
 	</url-mapping>
 	
 	<url-mapping id="autenticacao">
