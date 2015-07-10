@@ -25,9 +25,14 @@
 		<view-id value="/pages/admin/usuario.xhtml" />
 	</url-mapping>
 	
-	<url-mapping id="usuaralunoio">
+	<url-mapping id="aluno">
 		<pattern value="/admin/aluno" />
 		<view-id value="/pages/admin/aluno.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="professor">
+		<pattern value="/admin/professor" />
+		<view-id value="/pages/admin/professor.xhtml" />
 	</url-mapping>
 	
 	<url-mapping id="autenticacao">

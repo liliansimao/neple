@@ -3,7 +3,6 @@ package br.com.neple.dao;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
@@ -98,9 +97,11 @@ public class AlunoDAO extends GenericDAO<Aluno> {
 		Aluno resultado = null;
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		try {
-			Query consulta = sessao
-					.createQuery("SELECT a FROM Aluno a JOIN FETCH a.usuario u JOIN FETCH a.curso c JOIN FETCH u.fatec f WHERE u.codigo = :codigo");
-			consulta.setLong("codigo", codigo);
+			Criteria consulta = sessao.createCriteria(Aluno.class);
+			consulta.createAlias("usuario", "u");
+			consulta.createAlias("curso", "c");
+			consulta.createAlias("u.fatec", "f");
+			consulta.add(Restrictions.idEq(codigo));
 			resultado = (Aluno) consulta.uniqueResult();
 		} catch (RuntimeException runtimeException) {
 			throw runtimeException;

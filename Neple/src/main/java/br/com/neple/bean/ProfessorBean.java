@@ -1,6 +1,5 @@
 package br.com.neple.bean;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,14 +13,13 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.omnifaces.util.Messages;
 import org.primefaces.context.RequestContext;
 
-import br.com.neple.dao.AlunoDAO;
-import br.com.neple.dao.CursoDAO;
 import br.com.neple.dao.FatecDAO;
-import br.com.neple.domain.Aluno;
-import br.com.neple.domain.Curso;
+import br.com.neple.dao.ProfessorDAO;
 import br.com.neple.domain.Fatec;
+import br.com.neple.domain.Professor;
 import br.com.neple.domain.Usuario;
 import br.com.neple.enumeracao.Acao;
+import br.com.neple.enumeracao.Idioma;
 import br.com.neple.enumeracao.TipoUsuario;
 import br.com.neple.util.Criptografia;
 import br.com.neple.util.Mensagens;
@@ -29,23 +27,21 @@ import br.com.neple.util.Mensagens;
 @SuppressWarnings("serial")
 @Named
 @ViewScoped
-public class AlunoBean extends GenericBean {
-	private Aluno aluno;
+public class ProfessorBean extends GenericBean {
+	private Professor professor;
 
 	private List<Fatec> fatecs;
-	private List<Curso> cursos;
-	private List<Aluno> alunos;
+	private List<Professor> professors;
 
 	private FatecDAO fatecDAO;
-	private CursoDAO cursoDAO;
-	private AlunoDAO alunoDAO;
+	private ProfessorDAO professorDAO;
 
-	public Aluno getAluno() {
-		return aluno;
+	public Professor getProfessor() {
+		return professor;
 	}
 
-	public void setAluno(Aluno aluno) {
-		this.aluno = aluno;
+	public void setProfessor(Professor professor) {
+		this.professor = professor;
 	}
 
 	public List<Fatec> getFatecs() {
@@ -56,32 +52,23 @@ public class AlunoBean extends GenericBean {
 		this.fatecs = fatecs;
 	}
 
-	public List<Curso> getCursos() {
-		return cursos;
+	public List<Professor> getProfessors() {
+		return professors;
 	}
 
-	public void setCursos(List<Curso> cursos) {
-		this.cursos = cursos;
-	}
-
-	public List<Aluno> getAlunos() {
-		return alunos;
-	}
-
-	public void setAlunos(List<Aluno> alunos) {
-		this.alunos = alunos;
+	public void setProfessors(List<Professor> professors) {
+		this.professors = professors;
 	}
 
 	@PostConstruct
 	public void iniciar() {
 		this.fatecDAO = new FatecDAO();
-		this.cursoDAO = new CursoDAO();
-		this.alunoDAO = new AlunoDAO();
+		this.professorDAO = new ProfessorDAO();
 	}
 
 	public void listar() {
 		try {
-			this.alunos = this.alunoDAO.listar();
+			this.professors = this.professorDAO.listar();
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
@@ -93,28 +80,16 @@ public class AlunoBean extends GenericBean {
 			this.acao = Acao.NOVO;
 
 			this.fatecs = this.fatecDAO.listar();
-			this.cursos = new ArrayList<Curso>();
 
-			this.aluno = new Aluno();
+			this.professor = new Professor();
 
-			this.aluno.setUsuario(new Usuario());
-			this.aluno.getUsuario()
-					.setTipoUsuario(TipoUsuario.ALUNO.getSigla());
-			this.aluno.getUsuario().setAtivo(Boolean.TRUE);
-			this.aluno.getUsuario().setDataCriacao(new Date());
-
-			this.aluno.setDataAlteracao(new Date());
-			this.aluno.setUsuarioAlteracao(this.aluno.getUsuario());
-		} catch (RuntimeException runtimeException) {
-			Messages.addGlobalError(ExceptionUtils
-					.getRootCauseMessage(runtimeException));
-		}
-	}
-
-	public void buscarCursos() {
-		try {
-			this.cursos = cursoDAO.buscarPorFatec(this.aluno.getUsuario()
-					.getFatec().getCodigo());
+			this.professor.setUsuario(new Usuario());
+			this.professor.getUsuario()
+					.setTipoUsuario(TipoUsuario.PROFESSOR.getSigla());
+			this.professor.getUsuario().setAtivo(Boolean.TRUE);
+			this.professor.getUsuario().setDataCriacao(new Date());
+			
+			this.professor.setIdioma(Idioma.INGLES.getSigla());
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
@@ -125,13 +100,13 @@ public class AlunoBean extends GenericBean {
 		boolean salvou = false;
 
 		try {
-			this.aluno.getUsuario().setSenha(
-					Criptografia.cifrar(this.aluno.getUsuario().getSenha()));
+			this.professor.getUsuario().setSenha(
+					Criptografia.cifrar(this.professor.getUsuario().getSenha()));
 
 			if (this.acao == Acao.NOVO) {
-				this.alunoDAO.salvar(this.aluno);
+				this.professorDAO.salvar(this.professor);
 			} else {
-				this.alunoDAO.editar(this.aluno);
+				this.professorDAO.editar(this.professor);
 			}
 
 			this.listar();
@@ -143,8 +118,8 @@ public class AlunoBean extends GenericBean {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
 		} finally {
-			this.aluno.getUsuario().setSenha(
-					Criptografia.decifrar(this.aluno.getUsuario().getSenha()));
+			this.professor.getUsuario().setSenha(
+					Criptografia.decifrar(this.professor.getUsuario().getSenha()));
 			RequestContext.getCurrentInstance().addCallbackParam("salvou",
 					salvou);
 		}
@@ -154,8 +129,8 @@ public class AlunoBean extends GenericBean {
 		try {
 			Long codigo = (Long) event.getComponent().getAttributes()
 					.get("codigo");
-			this.aluno = this.alunoDAO.buscar(codigo);
-			this.alunoDAO.excluir(this.aluno);
+			this.professor = this.professorDAO.buscar(codigo);
+			this.professorDAO.excluir(this.professor);
 
 			this.listar();
 			Messages.addGlobalInfo(Mensagens.REGISTRO_REMOVIDO);
@@ -164,7 +139,7 @@ public class AlunoBean extends GenericBean {
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
-		}
+		} 
 	}
 
 	public void editar(ActionEvent event) {
@@ -173,16 +148,14 @@ public class AlunoBean extends GenericBean {
 
 			Long codigo = (Long) event.getComponent().getAttributes()
 					.get("codigo");
-			this.aluno = this.alunoDAO.buscar(codigo);
+			this.professor = this.professorDAO.buscar(codigo);
 
-			this.aluno.getUsuario().setSenha(
-					Criptografia.decifrar(this.aluno.getUsuario().getSenha()));
-			this.aluno.getUsuario().setConfirmacaoSenha(
-					this.aluno.getUsuario().getSenha());
+			this.professor.getUsuario().setSenha(
+					Criptografia.decifrar(this.professor.getUsuario().getSenha()));
+			this.professor.getUsuario().setConfirmacaoSenha(
+					this.professor.getUsuario().getSenha());
 
 			this.fatecs = this.fatecDAO.listar();
-			this.cursos = this.cursoDAO.buscarPorFatec(this.aluno.getUsuario()
-					.getFatec().getCodigo());
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));

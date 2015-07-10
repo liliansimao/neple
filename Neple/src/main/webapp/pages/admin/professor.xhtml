@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="/WEB-INF/templates/modeloProtected.xhtml">
+
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewAction action="#{professorBean.listar}" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmPesquisa">
+			<p:dataTable id="tblPesquisa" widgetVar="wvTblPesquisa"
+				value="#{professorBean.professors}" var="professor" paginator="true"
+				rows="7" emptyMessage="Nenhum registro encontrado."
+				tableStyle="table-layout: auto;">
+				<p:column headerText="Nome" filterBy="#{professor.usuario.nome}"
+					filterMatchMode="contains" sortBy="#{professor.usuario.nome}">
+					#{professor.usuario.nome}
+				</p:column>
+
+				<p:column headerText="E-mail" filterBy="#{professor.usuario.email}"
+					filterMatchMode="contains" sortBy="#{professor.usuario.email}">
+					#{professor.usuario.email}
+				</p:column>
+
+				<p:column headerText="Fatec"
+					filterBy="#{professor.usuario.fatec.nome}"
+					filterMatchMode="contains" sortBy="#{professor.usuario.fatec.nome}">
+					#{professor.usuario.fatec.nome}
+				</p:column>
+
+				<p:column headerText="Ativo"
+					sortBy="#{professor.usuario.ativoExtenso}"
+					style="text-align: center;">
+					#{professor.usuario.ativoExtenso}
+				</p:column>
+
+				<p:column headerText="Opções" style="text-align: center;">
+					<p:commandButton icon="ui-icon-trash"
+						actionListener="#{professorBean.excluir}"
+						update=":msgGlobal :frmPesquisa:tblPesquisa">
+						<f:attribute name="codigo" value="#{professor.codigo}" />
+						<p:confirm header="Confirmação"
+							message="Deseja excluir o professor selecionado?"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+					<p:commandButton icon="ui-icon-pencil"
+						actionListener="#{professorBean.editar}"
+						oncomplete="PF('dlgCadastro').show();"
+						update=":msgGlobal :frmCadastro:pnlCadastro">
+						<f:attribute name="codigo" value="#{professor.codigo}" />
+					</p:commandButton>
+				</p:column>
+				
+				<f:facet name="header">
+					<p:commandButton value="Novo"
+						actionListener="#{professorBean.novo}" icon="ui-icon-plus"
+						oncomplete="PF('dlgCadastro').show();"
+						update=":msgGlobal :frmCadastro:pnlCadastro" />
+				</f:facet>
+			</p:dataTable>
+
+			<p:confirmDialog id="dlgConfirmacao" global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check">
+				</p:commandButton>
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+
+		<p:dialog widgetVar="dlgCadastro" modal="true" appendTo="@(body)"
+			closable="true" draggable="false" resizable="false"
+			header="Professor - Cadastro">
+			<h:form id="frmCadastro">
+				<h:panelGrid id="pnlCadastro" columns="2">
+					<p:outputLabel value="Nome: *" />
+					<p:inputText value="#{professorBean.professor.usuario.nome}"
+						maxlength="80" size="50" />
+
+					<p:outputLabel value="Fatec: *" />
+					<p:selectOneMenu id="cbFatec"
+						value="#{professorBean.professor.usuario.fatec}"
+						converter="omnifaces.SelectItemsConverter" filter="true">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione uma Fatec" />
+						<f:selectItems value="#{professorBean.fatecs}" var="fatec"
+							itemValue="#{fatec}" itemLabel="#{fatec.nome}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="E-Mail: *" />
+					<p:inputText value="#{professorBean.professor.usuario.email}"
+						maxlength="130" size="50" />
+
+					<p:outputLabel value="Senha: *" />
+					<p:password id="txtSenhaAluno" maxlength="8" size="10"
+						value="#{professorBean.professor.usuario.senha}" redisplay="true"
+						match="txtConfirmacaoSenhaAluno" />
+
+					<p:outputLabel value="Confirmação da Senha: *" />
+					<p:password id="txtConfirmacaoSenhaAluno" maxlength="8" size="10"
+						value="#{professorBean.professor.usuario.confirmacaoSenha}"
+						redisplay="true" />
+
+					<p:outputLabel value="Apresentação: *" />
+					<p:inputTextarea value="#{professorBean.professor.apresentacao}"
+						maxlength="500" cols="50" rows="3" autoResize="false" />
+
+					<p:outputLabel value="Telefone de Contato: *" />
+					<h:panelGroup>
+						<p:inputText value="#{professorBean.professor.telefoneContato}"
+							maxlength="12" size="15">
+							<pe:keyFilter regEx="/[\d]/" />
+						</p:inputText>
+						<h:outputText value=" (Somente números)" />
+					</h:panelGroup>
+
+					<p:outputLabel value="Idioma: *" />
+					<p:selectOneRadio value="#{professorBean.professor.idioma}">
+						<f:selectItem itemValue="I" itemLabel="Inglês" />
+						<f:selectItem itemValue="E" itemLabel="Espanhol" />
+					</p:selectOneRadio>
+				</h:panelGrid>
+
+				<p:separator />
+				<h:panelGrid columns="1">
+					<p:commandButton value="Salvar"
+						actionListener="#{professorBean.salvar}"
+						update=":msgGlobal :frmCadastro:pnlCadastro :frmPesquisa:tblPesquisa"
+						icon="ui-icon-disk"
+						oncomplete="manipularPedidoSalvar(xhr, status, args)">
+					</p:commandButton>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
