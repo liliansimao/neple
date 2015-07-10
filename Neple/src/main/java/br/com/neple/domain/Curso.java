@@ -58,7 +58,7 @@ public class Curso extends GenericDomain {
 	@NotNull(message = "O campo ATIVO é obrigatório")
 	private Boolean ativo;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
 	@NotNull(message = "O campo FATEC é obrigatório")
 	private Fatec fatec;

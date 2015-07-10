@@ -92,6 +92,10 @@ public class PrimeiroAcessoBean implements Serializable {
 			this.cursos = new ArrayList<Curso>();
 
 			this.usuario = new Usuario();
+			this.usuario.setTipoUsuario(TipoUsuario.ALUNO.getSigla());
+			this.usuario.setAtivo(Boolean.TRUE);
+			this.usuario.setDataCriacao(new Date());
+			
 			this.professor = new Professor();
 			this.aluno = new Aluno();
 		} catch (RuntimeException runtimeException) {

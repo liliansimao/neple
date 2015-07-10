@@ -32,7 +32,7 @@
 		<property name="format_sql">true</property>
 
 		<!-- Cria as tabelas -->
-		<property name="hbm2ddl.auto">update</property>
+		<property name="hbm2ddl.auto">validate</property>
 
 		<!-- Classes mapeadas -->	
 		<mapping class="br.com.neple.domain.Fatec" />

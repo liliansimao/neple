@@ -9,14 +9,12 @@
 		<p:panelMenu id="menuPrincipal">
 			<p:submenu id="menuArquivo" label="Arquivo">
 				<p:menuitem id="menuItemPrincipal" value="Principal"
-					outcome="/pages/protected/principal.xhtml" />
+					outcome="pretty:principal" />
 				<p:menuitem id="menuItemSair" value="Sair" />
 			</p:submenu>
 
 			<p:submenu id="menuCadastros" label="Cadastros">
 				<p:menuitem id="menuItemUsuario" value="Usuário" outcome="pretty:usuario" />
-				<p:menuitem id="menuItemAluno" value="Aluno" />
-				<p:menuitem id="menuItemProfessor" value="Professor" />
 				<p:menuitem id="menuItemCurso" value="Curso" outcome="pretty:curso" />
 				<p:menuitem id="menuItemFatec" value="Fatec" outcome="pretty:fatec" />
 			</p:submenu>

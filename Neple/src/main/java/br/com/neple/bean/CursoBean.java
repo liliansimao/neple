@@ -18,6 +18,7 @@ import br.com.neple.domain.Curso;
 import br.com.neple.domain.Fatec;
 import br.com.neple.enumeracao.Acao;
 import br.com.neple.enumeracao.Periodo;
+import br.com.neple.util.Mensagens;
 
 @SuppressWarnings("serial")
 @Named
@@ -110,9 +111,9 @@ public class CursoBean extends GenericBean {
 
 			this.listar();
 			salvou = true;
-			Messages.addGlobalInfo("Curso salvo com sucesso");
+			Messages.addGlobalInfo(Mensagens.REGISTRO_SALVO);
 		} catch (ConstraintViolationException constraintViolationException) {
-			Messages.addGlobalWarn("Curso já cadastrado anteriormente");
+			Messages.addGlobalWarn(Mensagens.REGISTRO_UNICO);
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
@@ -133,9 +134,9 @@ public class CursoBean extends GenericBean {
 
 			this.listar();
 			excluiu = true;
-			Messages.addGlobalInfo("Curso removido com sucesso");
+			Messages.addGlobalInfo(Mensagens.REGISTRO_REMOVIDO);
 		} catch (ConstraintViolationException constraintViolationException) {
-			Messages.addGlobalWarn("O curso não pode ser removida, pois existem registros dependentes");
+			Messages.addGlobalWarn(Mensagens.REGISTRO_DEPENDENTE);
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="/WEB-INF/templates/modeloProtected.xhtml">
+
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewAction action="#{alunoBean.listar}" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmPesquisa">
+			<p:dataTable id="tblPesquisa" widgetVar="wvTblPesquisa"
+				value="#{alunoBean.alunos}" var="aluno" paginator="true" rows="7"
+				emptyMessage="Nenhum registro encontrado."
+				tableStyle="table-layout: auto;">
+				<p:column headerText="Nome" filterBy="#{aluno.usuario.nome}"
+					filterMatchMode="contains" sortBy="#{aluno.usuario.nome}">
+					#{aluno.usuario.nome}
+				</p:column>
+
+				<p:column headerText="E-mail" filterBy="#{aluno.usuario.email}"
+					filterMatchMode="contains" sortBy="#{aluno.usuario.email}">
+					#{aluno.usuario.email}
+				</p:column>
+
+				<p:column headerText="Fatec" filterBy="#{aluno.usuario.fatec.nome}"
+					filterMatchMode="contains" sortBy="#{aluno.usuario.fatec.nome}">
+					#{aluno.usuario.fatec.nome}
+				</p:column>
+
+				<p:column headerText="Tipo do Usuário"
+					filterBy="#{aluno.usuario.tipoUsuarioExtenso}"
+					filterMatchMode="contains"
+					sortBy="#{aluno.usuario.tipoUsuarioExtenso}">
+					#{aluno.usuario.tipoUsuarioExtenso}
+				</p:column>
+
+				<p:column headerText="Ativo" sortBy="#{aluno.usuario.ativoExtenso}"
+					style="text-align: center;">
+					#{aluno.usuario.ativoExtenso}
+				</p:column>
+
+				<p:column headerText="Opções" style="text-align: center;">
+					<p:commandButton icon="ui-icon-trash"
+						actionListener="#{alunoBean.excluir}"
+						update=":msgGlobal :frmPesquisa:tblPesquisa">
+						<f:attribute name="codigo" value="#{aluno.codigo}" />
+						<p:confirm header="Confirmação"
+							message="Deseja excluir o aluno selecionado?"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+					<p:commandButton icon="ui-icon-pencil"
+						actionListener="#{alunoBean.editar}"
+						oncomplete="PF('dlgCadastro').show();"
+						update=":msgGlobal :frmCadastro:pnlCadastro">
+						<f:attribute name="codigo" value="#{aluno.codigo}" />
+					</p:commandButton>
+				</p:column>
+
+				<f:facet name="header">
+					<p:commandButton value="Novo" actionListener="#{alunoBean.novo}"
+						icon="ui-icon-plus" oncomplete="PF('dlgCadastro').show();"
+						update=":msgGlobal :frmCadastro:pnlCadastro" />
+				</f:facet>
+			</p:dataTable>
+
+			<p:confirmDialog id="dlgConfirmacao" global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check">
+				</p:commandButton>
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+
+		<p:dialog widgetVar="dlgCadastro" modal="true" appendTo="@(body)"
+			closable="true" draggable="false" resizable="false"
+			header="Aluno - Cadastro">
+			<h:form id="frmCadastro">
+				<h:panelGrid id="pnlCadastro" columns="2">
+					<p:outputLabel value="Nome: *" />
+					<p:inputText value="#{alunoBean.aluno.usuario.nome}" maxlength="80"
+						size="50" />
+
+					<p:outputLabel value="Fatec: *" />
+					<p:selectOneMenu id="cbFatec"
+						value="#{alunoBean.aluno.usuario.fatec}"
+						converter="omnifaces.SelectItemsConverter" filter="true">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione uma Fatec" />
+						<f:selectItems value="#{alunoBean.fatecs}" var="fatec"
+							itemValue="#{fatec}" itemLabel="#{fatec.nome}" />
+						<p:ajax event="change" listener="#{alunoBean.buscarCursos}"
+							update=":frmCadastro:cbCursos" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="E-Mail: *" />
+					<p:inputText value="#{alunoBean.aluno.usuario.email}"
+						maxlength="130" size="50" />
+
+					<p:outputLabel value="Senha: *" />
+					<p:password id="txtSenhaAluno" maxlength="8" size="10"
+						value="#{alunoBean.aluno.usuario.senha}" redisplay="true"
+						match="txtConfirmacaoSenhaAluno" />
+
+					<p:outputLabel value="Confirmação da Senha: *" />
+					<p:password id="txtConfirmacaoSenhaAluno" maxlength="8" size="10"
+						value="#{alunoBean.aluno.usuario.confirmacaoSenha}"
+						redisplay="true" />
+
+					<p:outputLabel value="RA: *" />
+					<p:inputText value="#{alunoBean.aluno.ra}" maxlength="11" size="15">
+						<pe:keyFilter regEx="/[\d]/" />
+					</p:inputText>
+
+					<p:outputLabel value="CPF: *" />
+					<h:panelGroup>
+						<p:inputText value="#{alunoBean.aluno.cpf}" maxlength="11"
+							size="15">
+							<pe:keyFilter regEx="/[\d]/" />
+						</p:inputText>
+						<h:outputText value=" (Somente números)" />
+					</h:panelGroup>
+
+					<p:outputLabel value="Curso: *" />
+					<p:selectOneMenu id="cbCursos" value="#{alunoBean.aluno.curso}"
+						converter="omnifaces.SelectItemsConverter" filter="true">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione um Curso" />
+						<f:selectItems value="#{alunoBean.cursos}" var="curso"
+							itemValue="#{curso}"
+							itemLabel="#{curso.curso} (#{curso.periodoPorExtenso})" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+
+				<p:separator />
+				<h:panelGrid columns="1">
+					<p:commandButton value="Salvar"
+						actionListener="#{alunoBean.salvar}"
+						update=":msgGlobal :frmCadastro:pnlCadastro :frmPesquisa:tblPesquisa"
+						icon="ui-icon-disk"
+						oncomplete="manipularPedidoSalvar(xhr, status, args)">
+					</p:commandButton>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

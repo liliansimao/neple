@@ -6,11 +6,10 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -19,17 +18,14 @@ import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import br.com.neple.enumeracao.TipoUsuario;
 
 @SuppressWarnings("serial")
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }) })
-@SequenceGenerator(name = "codigo_generator", sequenceName = "usuario_sequence", initialValue = 1)
+@SequenceGenerator(name = "codigo_generator", sequenceName = "usuario_sequence", allocationSize = 1)
 public class Usuario extends GenericDomain {
 	@Column(length = 80)
 	@Basic(optional = false)
@@ -68,17 +64,17 @@ public class Usuario extends GenericDomain {
 	@NotNull(message = "O campo DATA DE CRIAÇÃO é obrigatório")
 	private Date dataCriacao;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
 	@NotNull(message = "O campo FATEC é obrigatório")
 	private Fatec fatec;
 
-	@OneToOne(mappedBy = "usuario")
-	@Cascade(value = CascadeType.SAVE_UPDATE)
+	@OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY)
+	@PrimaryKeyJoinColumn
 	private Professor professor;
 	
-	@OneToOne(mappedBy = "usuario")
-	@Cascade(value = CascadeType.SAVE_UPDATE)
+	@OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY)
+	@PrimaryKeyJoinColumn
 	private Aluno aluno;
 
 	public String getNome() {

@@ -30,6 +30,11 @@
 					#{usuario.email}
 				</p:column>
 
+				<p:column headerText="Fatec" filterBy="#{usuario.fatec.nome}"
+					filterMatchMode="contains" sortBy="#{usuario.fatec.nome}">
+					#{usuario.fatec.nome}
+				</p:column>
+
 				<p:column headerText="Tipo do Usuário"
 					filterBy="#{usuario.tipoUsuarioExtenso}" filterMatchMode="contains"
 					sortBy="#{usuario.tipoUsuarioExtenso}">
@@ -53,7 +58,8 @@
 					</p:commandButton>
 					<p:commandButton icon="ui-icon-pencil"
 						actionListener="#{usuarioBean.editar}"
-						oncomplete="PF('dlgCadastro').show();">
+						oncomplete="PF('dlgCadastro').show();" 
+						update=":frmCadastro:painelUsuario :frmCadastro:painelProfessor :frmCadastro:painelAluno">
 						<f:attribute name="codigo" value="#{usuario.codigo}" />
 					</p:commandButton>
 				</p:column>
@@ -61,7 +67,7 @@
 				<f:facet name="header">
 					<p:commandButton value="Novo" actionListener="#{usuarioBean.novo}"
 						icon="ui-icon-plus" oncomplete="PF('dlgCadastro').show();"
-						update=":frmCadastro:pnlCadastro" />
+						update=":frmCadastro:painelUsuario :frmCadastro:painelProfessor :frmCadastro:painelAluno" />
 				</f:facet>
 			</p:dataTable>
 
@@ -76,9 +82,9 @@
 
 		<p:dialog widgetVar="dlgCadastro" modal="true" appendTo="@(body)"
 			closable="true" draggable="false" resizable="false"
-			header="Fatec - Cadastro">
+			header="Usuário - Cadastro">
 			<h:form id="frmCadastro">
-				<h:panelGrid id="pnlCadastro" columns="2">
+				<h:panelGrid id="painelUsuario" columns="2">
 					<p:outputLabel value="Nome: *" />
 					<p:inputText value="#{usuarioBean.usuario.nome}" maxlength="80"
 						size="50" />
@@ -90,6 +96,8 @@
 							itemLabel="Selecione uma Fatec" />
 						<f:selectItems value="#{usuarioBean.fatecs}" var="fatec"
 							itemValue="#{fatec}" itemLabel="#{fatec.nome}" />
+						<p:ajax event="change" listener="#{usuarioBean.buscarCursos}"
+							update=":frmCadastro:cbCursos" />
 					</p:selectOneMenu>
 
 					<p:outputLabel value="E-Mail: *" />
@@ -108,22 +116,81 @@
 					<p:outputLabel value="Tipo do Usuário: *" />
 					<p:selectOneRadio id="radTipoUsuario"
 						value="#{usuarioBean.usuario.tipoUsuario}">
+						<f:selectItem itemValue="A" itemLabel="Aluno" />
+						<f:selectItem itemValue="P" itemLabel="Professor" />
 						<f:selectItem itemValue="C" itemLabel="Coordenador" />
 						<f:selectItem itemValue="D" itemLabel="Diretor" />
 						<f:selectItem itemValue="S" itemLabel="Secretária" />
 						<f:selectItem itemValue="L" itemLabel="Laboratório de Informática" />
+						<p:ajax event="change"
+							update=":frmCadastro:painelProfessor :frmCadastro:painelAluno" />
+						<p:ajax event="change" listener="#{usuarioBean.buscarCursos}"
+							update=":frmCadastro:cbCursos" />
 					</p:selectOneRadio>
-					
+
 					<p:outputLabel value="Ativo: *" />
-					<p:selectBooleanCheckbox
-						value="#{usuarioBean.usuario.ativo}" />
+					<p:selectBooleanCheckbox value="#{usuarioBean.usuario.ativo}" />
 				</h:panelGrid>
-				
+
+				<p:outputPanel id="painelProfessor">
+					<p:separator rendered="#{usuarioBean.ehProfessor()}" />
+					<h:panelGrid columns="2" rendered="#{usuarioBean.ehProfessor()}">
+						<p:outputLabel value="Apresentação: *" />
+						<p:inputTextarea value="#{usuarioBean.professor.apresentacao}"
+							maxlength="500" cols="50" rows="3" autoResize="false" />
+
+						<p:outputLabel value="Telefone de Contato: *" />
+						<h:panelGroup>
+							<p:inputText value="#{usuarioBean.professor.telefoneContato}"
+								maxlength="12" size="15">
+								<pe:keyFilter regEx="/[\d]/" />
+							</p:inputText>
+							<h:outputText value=" (Somente números)" />
+						</h:panelGroup>
+
+						<p:outputLabel value="Idioma: *" />
+						<p:selectOneRadio value="#{usuarioBean.professor.idioma}">
+							<f:selectItem itemValue="I" itemLabel="Inglês" />
+							<f:selectItem itemValue="E" itemLabel="Espanhol" />
+						</p:selectOneRadio>
+					</h:panelGrid>
+				</p:outputPanel>
+
+				<p:outputPanel id="painelAluno">
+					<p:separator rendered="#{usuarioBean.ehAluno()}" />
+					<h:panelGrid columns="2" rendered="#{usuarioBean.ehAluno()}">
+						<p:outputLabel value="RA: *" />
+						<p:inputText value="#{usuarioBean.aluno.ra}" maxlength="11"
+							size="15">
+							<pe:keyFilter regEx="/[\d]/" />
+						</p:inputText>
+
+						<p:outputLabel value="CPF: *" />
+						<h:panelGroup>
+							<p:inputText value="#{usuarioBean.aluno.cpf}" maxlength="11"
+								size="15">
+								<pe:keyFilter regEx="/[\d]/" />
+							</p:inputText>
+							<h:outputText value=" (Somente números)" />
+						</h:panelGroup>
+
+						<p:outputLabel value="Curso: *" />
+						<p:selectOneMenu id="cbCursos" value="#{usuarioBean.aluno.curso}"
+							converter="omnifaces.SelectItemsConverter" filter="true">
+							<f:selectItem noSelectionOption="true"
+								itemLabel="Selecione um Curso" />
+							<f:selectItems value="#{usuarioBean.cursos}" var="curso"
+								itemValue="#{curso}"
+								itemLabel="#{curso.curso} (#{curso.periodoPorExtenso})" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</p:outputPanel>
+
 				<p:separator />
 				<h:panelGrid columns="1">
 					<p:commandButton value="Salvar"
 						actionListener="#{usuarioBean.salvar}"
-						update=":msgGlobal :frmCadastro:pnlCadastro :frmPesquisa:tblPesquisa"
+						update=":msgGlobal :frmCadastro:painelUsuario :frmCadastro:painelProfessor :frmCadastro:painelAluno :frmPesquisa:tblPesquisa"
 						icon="ui-icon-disk"
 						oncomplete="manipularPedidoSalvar(xhr, status, args)">
 					</p:commandButton>

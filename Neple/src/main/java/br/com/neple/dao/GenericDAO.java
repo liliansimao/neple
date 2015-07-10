@@ -6,7 +6,6 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
 
 import br.com.neple.util.HibernateUtil;
 
@@ -78,9 +77,7 @@ public class GenericDAO<Entidade> {
 		Entidade resultado = null;
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		try {
-			Criteria consulta = sessao.createCriteria(classe);
-			consulta.add(Restrictions.idEq(codigo));
-			resultado = (Entidade) consulta.uniqueResult();
+			resultado = (Entidade) sessao.get(classe, codigo);
 		} catch (RuntimeException runtimeException) {
 			throw runtimeException;
 		} finally {

@@ -17,15 +17,11 @@ import org.primefaces.context.RequestContext;
 import br.com.neple.dao.AlunoDAO;
 import br.com.neple.dao.CursoDAO;
 import br.com.neple.dao.FatecDAO;
-import br.com.neple.dao.ProfessorDAO;
-import br.com.neple.dao.UsuarioDAO;
 import br.com.neple.domain.Aluno;
 import br.com.neple.domain.Curso;
 import br.com.neple.domain.Fatec;
-import br.com.neple.domain.Professor;
 import br.com.neple.domain.Usuario;
 import br.com.neple.enumeracao.Acao;
-import br.com.neple.enumeracao.Idioma;
 import br.com.neple.enumeracao.TipoUsuario;
 import br.com.neple.util.Criptografia;
 import br.com.neple.util.Mensagens;
@@ -33,28 +29,16 @@ import br.com.neple.util.Mensagens;
 @SuppressWarnings("serial")
 @Named
 @ViewScoped
-public class UsuarioBean extends GenericBean {
-	private Usuario usuario;
+public class AlunoBean extends GenericBean {
 	private Aluno aluno;
-	private Professor professor;
 
 	private List<Fatec> fatecs;
 	private List<Curso> cursos;
-	private List<Usuario> usuarios;
+	private List<Aluno> alunos;
 
 	private FatecDAO fatecDAO;
 	private CursoDAO cursoDAO;
-	private UsuarioDAO usuarioDAO;
 	private AlunoDAO alunoDAO;
-	private ProfessorDAO professorDAO;
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
 
 	public Aluno getAluno() {
 		return aluno;
@@ -62,14 +46,6 @@ public class UsuarioBean extends GenericBean {
 
 	public void setAluno(Aluno aluno) {
 		this.aluno = aluno;
-	}
-
-	public Professor getProfessor() {
-		return professor;
-	}
-
-	public void setProfessor(Professor professor) {
-		this.professor = professor;
 	}
 
 	public List<Fatec> getFatecs() {
@@ -88,50 +64,24 @@ public class UsuarioBean extends GenericBean {
 		this.cursos = cursos;
 	}
 
-	public List<Usuario> getUsuarios() {
-		return usuarios;
+	public List<Aluno> getAlunos() {
+		return alunos;
 	}
 
-	public void setUsuarios(List<Usuario> usuarios) {
-		this.usuarios = usuarios;
+	public void setAlunos(List<Aluno> alunos) {
+		this.alunos = alunos;
 	}
 
 	@PostConstruct
 	public void iniciar() {
 		this.fatecDAO = new FatecDAO();
 		this.cursoDAO = new CursoDAO();
-		this.usuarioDAO = new UsuarioDAO();
 		this.alunoDAO = new AlunoDAO();
-		this.professorDAO = new ProfessorDAO();
-	}
-
-	public boolean ehUsuario() {
-		if (this.usuario == null) {
-			return Boolean.FALSE;
-		}
-		return this.usuario.getTipoUsuario() != TipoUsuario.ALUNO.getSigla()
-				&& this.usuario.getTipoUsuario() != TipoUsuario.PROFESSOR
-						.getSigla();
-	}
-
-	public boolean ehAluno() {
-		if (this.usuario == null) {
-			return Boolean.FALSE;
-		}
-		return this.usuario.getTipoUsuario() == TipoUsuario.ALUNO.getSigla();
-	}
-
-	public boolean ehProfessor() {
-		if (this.usuario == null) {
-			return Boolean.FALSE;
-		}
-		return this.usuario.getTipoUsuario() == TipoUsuario.PROFESSOR
-				.getSigla();
 	}
 
 	public void listar() {
 		try {
-			this.usuarios = this.usuarioDAO.listar();
+			this.alunos = this.alunoDAO.listar();
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
@@ -145,16 +95,16 @@ public class UsuarioBean extends GenericBean {
 			this.fatecs = this.fatecDAO.listar();
 			this.cursos = new ArrayList<Curso>();
 
-			this.usuario = new Usuario();
-			this.usuario.setTipoUsuario(TipoUsuario.ALUNO.getSigla());
-			this.usuario.setAtivo(Boolean.TRUE);
-			this.usuario.setDataCriacao(new Date());
-
-			this.professor = new Professor();
-			this.professor.setIdioma(Idioma.INGLES.getSigla());
-
 			this.aluno = new Aluno();
+
+			this.aluno.setUsuario(new Usuario());
+			this.aluno.getUsuario()
+					.setTipoUsuario(TipoUsuario.ALUNO.getSigla());
+			this.aluno.getUsuario().setAtivo(Boolean.TRUE);
+			this.aluno.getUsuario().setDataCriacao(new Date());
+			
 			this.aluno.setDataAlteracao(new Date());
+			this.aluno.setUsuarioAlteracao(this.aluno.getUsuario());
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
@@ -163,10 +113,8 @@ public class UsuarioBean extends GenericBean {
 
 	public void buscarCursos() {
 		try {
-			if (this.usuario.getTipoUsuario() == TipoUsuario.ALUNO.getSigla()) {
-				this.cursos = cursoDAO.buscarPorFatec(this.usuario.getFatec()
-						.getCodigo());
-			}
+			this.cursos = cursoDAO.buscarPorFatec(this.aluno.getUsuario()
+					.getFatec().getCodigo());
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
@@ -177,30 +125,13 @@ public class UsuarioBean extends GenericBean {
 		boolean salvou = false;
 
 		try {
-			this.usuario.setSenha(Criptografia.cifrar(this.usuario.getSenha()));
+			this.aluno.getUsuario().setSenha(
+					Criptografia.cifrar(this.aluno.getUsuario().getSenha()));
 
-			if (this.usuario.getTipoUsuario() == TipoUsuario.ALUNO.getSigla()) {
-				this.aluno.setUsuario(this.usuario);
-				this.aluno.setUsuarioAlteracao(this.usuario);
-				if (this.acao == Acao.NOVO) {
-					this.alunoDAO.salvar(this.aluno);
-				} else {
-					this.alunoDAO.editar(this.aluno);
-				}
-			} else if (this.usuario.getTipoUsuario() == TipoUsuario.PROFESSOR
-					.getSigla()) {
-				this.professor.setUsuario(this.usuario);
-				if (this.acao == Acao.NOVO) {
-					this.professorDAO.salvar(this.professor);
-				} else {
-					this.professorDAO.editar(this.professor);
-				}
+			if (this.acao == Acao.NOVO) {
+				this.alunoDAO.salvar(this.aluno);
 			} else {
-				if (this.acao == Acao.NOVO) {
-					this.usuarioDAO.salvar(this.usuario);
-				} else {
-					this.usuarioDAO.editar(this.usuario);
-				}
+				this.alunoDAO.editar(this.aluno);
 			}
 
 			this.listar();
@@ -212,8 +143,8 @@ public class UsuarioBean extends GenericBean {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
 		} finally {
-			this.usuario
-					.setSenha(Criptografia.decifrar(this.usuario.getSenha()));
+			this.aluno.getUsuario().setSenha(
+					Criptografia.decifrar(this.aluno.getUsuario().getSenha()));
 			RequestContext.getCurrentInstance().addCallbackParam("salvou",
 					salvou);
 		}
@@ -225,8 +156,8 @@ public class UsuarioBean extends GenericBean {
 		try {
 			Long codigo = (Long) event.getComponent().getAttributes()
 					.get("codigo");
-			this.usuario = this.usuarioDAO.buscar(codigo);
-			this.usuarioDAO.excluir(this.usuario);
+			this.aluno = this.alunoDAO.buscar(codigo);
+			this.alunoDAO.excluir(this.aluno);
 
 			this.listar();
 			excluiu = true;
@@ -248,26 +179,16 @@ public class UsuarioBean extends GenericBean {
 
 			Long codigo = (Long) event.getComponent().getAttributes()
 					.get("codigo");
-			
-			this.usuario = this.usuarioDAO.buscar(codigo);
 			this.aluno = this.alunoDAO.buscar(codigo);
-			this.professor = this.professorDAO.buscar(codigo);
 
-			this.usuario
-					.setSenha(Criptografia.decifrar(this.usuario.getSenha()));
-			this.usuario.setConfirmacaoSenha(this.usuario.getSenha());
-
-			if(this.aluno == null){
-				this.aluno = new Aluno();
-			}
-			
-			if(this.professor == null){
-				this.professor = new Professor();
-			}
+			this.aluno.getUsuario().setSenha(
+					Criptografia.decifrar(this.aluno.getUsuario().getSenha()));
+			this.aluno.getUsuario().setConfirmacaoSenha(
+					this.aluno.getUsuario().getSenha());
 
 			this.fatecs = this.fatecDAO.listar();
-			this.cursos = this.cursoDAO.buscarPorFatec(this.usuario.getFatec()
-					.getCodigo());
+			this.cursos = this.cursoDAO.buscarPorFatec(this.aluno.getUsuario()
+					.getFatec().getCodigo());
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));

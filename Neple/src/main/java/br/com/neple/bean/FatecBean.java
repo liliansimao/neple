@@ -15,6 +15,7 @@ import org.primefaces.context.RequestContext;
 import br.com.neple.dao.FatecDAO;
 import br.com.neple.domain.Fatec;
 import br.com.neple.enumeracao.Acao;
+import br.com.neple.util.Mensagens;
 
 @SuppressWarnings("serial")
 @Named
@@ -84,9 +85,9 @@ public class FatecBean extends GenericBean {
 
 			this.listar();
 			salvou = true;
-			Messages.addGlobalInfo("Fatec salva com sucesso");
+			Messages.addGlobalInfo(Mensagens.REGISTRO_SALVO);
 		} catch (ConstraintViolationException constraintViolationException) {
-			Messages.addGlobalWarn("Fatec já cadastrada anteriormente");
+			Messages.addGlobalWarn(Mensagens.REGISTRO_UNICO);
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
@@ -107,9 +108,9 @@ public class FatecBean extends GenericBean {
 
 			this.listar();
 			excluiu = true;
-			Messages.addGlobalInfo("Fatec removida com sucesso");
+			Messages.addGlobalInfo(Mensagens.REGISTRO_REMOVIDO);
 		} catch (ConstraintViolationException constraintViolationException) {
-			Messages.addGlobalWarn("A Fatec não pode ser removida, pois existem registros dependentes");
+			Messages.addGlobalWarn(Mensagens.REGISTRO_DEPENDENTE);
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));

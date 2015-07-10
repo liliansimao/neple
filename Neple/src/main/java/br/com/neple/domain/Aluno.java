@@ -1,15 +1,14 @@
 package br.com.neple.domain;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -21,13 +20,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @SuppressWarnings("serial")
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "cpf" }) })
-public class Aluno implements Serializable {
-	@Id
-	@OneToOne(fetch = FetchType.EAGER)
-	@NotNull(message = "O campo USUÁRIO é obrigatório")
-	private Usuario usuario;
-	
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "cpf"}) })
+public class Aluno extends GenericDomain {
 	@Column(length = 14)
 	@Basic(optional = false)
 	@NotEmpty(message = "O campo RA é obrigatório")
@@ -43,16 +37,21 @@ public class Aluno implements Serializable {
 	@NotNull(message = "O campo DATA DE ALTERAÇÃO é obrigatório")
 	private Date dataAlteracao;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
 	@NotNull(message = "O campo CURSO é obrigatório")
 	private Curso curso;
 	
-	@OneToOne(fetch = FetchType.EAGER)
+	@MapsId
+	@OneToOne(fetch = FetchType.LAZY)
+	@NotNull(message = "O campo USUÁRIO é obrigatório")
+	private Usuario usuario;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
 	@NotNull(message = "O campo USUÁRIO ALTERAÇÃO é obrigatório")
 	private Usuario usuarioAlteracao;
-
+	
 	public String getRa() {
 		return ra;
 	}

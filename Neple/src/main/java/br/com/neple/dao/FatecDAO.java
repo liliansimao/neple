@@ -14,19 +14,18 @@ public class FatecDAO extends GenericDAO<Fatec> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Fatec> listar() {
+		List<Fatec> resultado = null;
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		try {
 			Criteria consulta = sessao.createCriteria(Fatec.class);
 			consulta.addOrder(Order.asc("nome"));
-
-			List<Fatec> resultado = consulta.list();
-
-			return resultado;
+			resultado = consulta.list();
 		} catch (RuntimeException runtimeException) {
 			throw runtimeException;
 		} finally {
 			sessao.close();
 		}
+		return resultado;
 	}
 
 	public Fatec buscar(String nome) {
