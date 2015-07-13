@@ -1,5 +1,6 @@
 package br.com.neple.bean;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.hibernate.exception.ConstraintViolationException;
 import org.omnifaces.util.Messages;
 import org.primefaces.context.RequestContext;
@@ -31,7 +34,7 @@ public class ProfessorBean extends GenericBean {
 	private Professor professor;
 
 	private List<Fatec> fatecs;
-	private List<Professor> professors;
+	private List<Professor> professores;
 
 	private FatecDAO fatecDAO;
 	private ProfessorDAO professorDAO;
@@ -52,12 +55,12 @@ public class ProfessorBean extends GenericBean {
 		this.fatecs = fatecs;
 	}
 
-	public List<Professor> getProfessors() {
-		return professors;
+	public List<Professor> getProfessores() {
+		return professores;
 	}
-
-	public void setProfessors(List<Professor> professors) {
-		this.professors = professors;
+	
+	public void setProfessores(List<Professor> professores) {
+		this.professores = professores;
 	}
 
 	@PostConstruct
@@ -68,7 +71,17 @@ public class ProfessorBean extends GenericBean {
 
 	public void listar() {
 		try {
-			this.professors = this.professorDAO.listar();
+			if (this.ehAdministrador()) {
+				this.professores = this.professorDAO.listar();
+			} else if(this.ehProfessor()){
+				Subject usuario = SecurityUtils.getSubject();
+				String email = (String) usuario.getPrincipal();
+				
+				Professor professor = this.professorDAO.buscar(email);
+				
+				this.professores = new ArrayList<Professor>();
+				this.professores.add(professor);
+			}
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
@@ -84,11 +97,11 @@ public class ProfessorBean extends GenericBean {
 			this.professor = new Professor();
 
 			this.professor.setUsuario(new Usuario());
-			this.professor.getUsuario()
-					.setTipoUsuario(TipoUsuario.PROFESSOR.getSigla());
-			this.professor.getUsuario().setAtivo(Boolean.TRUE);
+			this.professor.getUsuario().setTipoUsuario(
+					TipoUsuario.PROFESSOR.getSigla());
+			this.professor.getUsuario().setAtivo(Boolean.FALSE);
 			this.professor.getUsuario().setDataCriacao(new Date());
-			
+
 			this.professor.setIdioma(Idioma.INGLES.getSigla());
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
@@ -100,8 +113,10 @@ public class ProfessorBean extends GenericBean {
 		boolean salvou = false;
 
 		try {
-			this.professor.getUsuario().setSenha(
-					Criptografia.cifrar(this.professor.getUsuario().getSenha()));
+			this.professor.getUsuario()
+					.setSenha(
+							Criptografia.cifrar(this.professor.getUsuario()
+									.getSenha()));
 
 			if (this.acao == Acao.NOVO) {
 				this.professorDAO.salvar(this.professor);
@@ -119,7 +134,8 @@ public class ProfessorBean extends GenericBean {
 					.getRootCauseMessage(runtimeException));
 		} finally {
 			this.professor.getUsuario().setSenha(
-					Criptografia.decifrar(this.professor.getUsuario().getSenha()));
+					Criptografia.decifrar(this.professor.getUsuario()
+							.getSenha()));
 			RequestContext.getCurrentInstance().addCallbackParam("salvou",
 					salvou);
 		}
@@ -139,7 +155,7 @@ public class ProfessorBean extends GenericBean {
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
-		} 
+		}
 	}
 
 	public void editar(ActionEvent event) {
@@ -151,7 +167,8 @@ public class ProfessorBean extends GenericBean {
 			this.professor = this.professorDAO.buscar(codigo);
 
 			this.professor.getUsuario().setSenha(
-					Criptografia.decifrar(this.professor.getUsuario().getSenha()));
+					Criptografia.decifrar(this.professor.getUsuario()
+							.getSenha()));
 			this.professor.getUsuario().setConfirmacaoSenha(
 					this.professor.getUsuario().getSenha());
 

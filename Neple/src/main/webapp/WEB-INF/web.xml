@@ -38,21 +38,21 @@
 	</listener>
 
 	<!-- Configuração do Shiro -->
-	<!-- <listener> -->
-	<!-- <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class> -->
-	<!-- </listener> -->
-	<!-- <filter> -->
-	<!-- <filter-name>ShiroFilter</filter-name> -->
-	<!-- <filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class> -->
-	<!-- </filter> -->
-	<!-- <filter-mapping> -->
-	<!-- <filter-name>ShiroFilter</filter-name> -->
-	<!-- <url-pattern>/*</url-pattern> -->
-	<!-- <dispatcher>REQUEST</dispatcher> -->
-	<!-- <dispatcher>FORWARD</dispatcher> -->
-	<!-- <dispatcher>INCLUDE</dispatcher> -->
-	<!-- <dispatcher>ERROR</dispatcher> -->
-	<!-- </filter-mapping> -->
+<!-- 	<listener> -->
+<!-- 		<listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class> -->
+<!-- 	</listener> -->
+<!-- 	<filter> -->
+<!-- 		<filter-name>ShiroFilter</filter-name> -->
+<!-- 		<filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class> -->
+<!-- 	</filter> -->
+<!-- 	<filter-mapping> -->
+<!-- 		<filter-name>ShiroFilter</filter-name> -->
+<!-- 		<url-pattern>/*</url-pattern> -->
+<!-- 		<dispatcher>REQUEST</dispatcher> -->
+<!-- 		<dispatcher>FORWARD</dispatcher> -->
+<!-- 		<dispatcher>INCLUDE</dispatcher> -->
+<!-- 		<dispatcher>ERROR</dispatcher> -->
+<!-- 	</filter-mapping> -->
 
 	<!-- Estágio do Projeto -->
 	<context-param>
@@ -76,4 +76,14 @@
 	<session-config>
 		<session-timeout>1</session-timeout>
 	</session-config>
+	
+	<!-- Páginas de Erro -->
+	<error-page>
+		<error-code>401</error-code>
+		<location>/WEB-INF/errorpages/401.xhtml</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/errorpages/404.xhtml</location>
+	</error-page>
 </web-app>

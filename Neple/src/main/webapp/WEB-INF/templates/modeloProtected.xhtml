@@ -18,10 +18,10 @@
 <h:body>
 	<p:growl id="msgGlobal" life="5000" />
 
-	<p:ajaxStatus id="ajaxStatus" onstart="PF('statusDialog').show()"
-		onsuccess="PF('statusDialog').hide()" />
+	<p:ajaxStatus id="ajaxStatus" onstart="PF('dlgStatus').show()"
+		onsuccess="PF('dlgStatus').hide()" />
 
-	<p:dialog id="dlgStatus" widgetVar="statusDialog" modal="true"
+	<p:dialog widgetVar="dlgStatus" modal="true"
 		appendTo="@(body)" draggable="false" closable="false"
 		resizable="false" showHeader="false">
 		<p:graphicImage library="images" name="ajaxloadingbar.gif" />
@@ -30,7 +30,7 @@
 	<div id="geral">
 		<div id="topo">
 			<ui:insert name="topo">
-				<h:graphicImage rendered="true" library="images" name="logo.png" />
+				<p:graphicImage library="images" name="logo.png" />
 			</ui:insert>
 		</div>
 

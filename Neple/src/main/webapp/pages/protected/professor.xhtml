@@ -17,7 +17,7 @@
 	<ui:define name="conteudo">
 		<h:form id="frmPesquisa">
 			<p:dataTable id="tblPesquisa" widgetVar="wvTblPesquisa"
-				value="#{professorBean.professors}" var="professor" paginator="true"
+				value="#{professorBean.professores}" var="professor" paginator="true"
 				rows="7" emptyMessage="Nenhum registro encontrado."
 				tableStyle="table-layout: auto;">
 				<p:column headerText="Nome" filterBy="#{professor.usuario.nome}"
@@ -45,7 +45,8 @@
 				<p:column headerText="Opções" style="text-align: center;">
 					<p:commandButton icon="ui-icon-trash"
 						actionListener="#{professorBean.excluir}"
-						update=":msgGlobal :frmPesquisa:tblPesquisa">
+						update=":msgGlobal :frmPesquisa:tblPesquisa"
+						rendered="#{professorBean.ehAdministrador()}">
 						<f:attribute name="codigo" value="#{professor.codigo}" />
 						<p:confirm header="Confirmação"
 							message="Deseja excluir o professor selecionado?"
@@ -58,13 +59,15 @@
 						<f:attribute name="codigo" value="#{professor.codigo}" />
 					</p:commandButton>
 				</p:column>
-				
-				<f:facet name="header">
-					<p:commandButton value="Novo"
-						actionListener="#{professorBean.novo}" icon="ui-icon-plus"
-						oncomplete="PF('dlgCadastro').show();"
-						update=":msgGlobal :frmCadastro:pnlCadastro" />
-				</f:facet>
+
+				<p:outputPanel rendered="#{professorBean.ehAdministrador()}">
+					<f:facet name="header">
+						<p:commandButton value="Novo"
+							actionListener="#{professorBean.novo}" icon="ui-icon-plus"
+							oncomplete="PF('dlgCadastro').show();"
+							update=":msgGlobal :frmCadastro:pnlCadastro" />
+					</f:facet>
+				</p:outputPanel>
 			</p:dataTable>
 
 			<p:confirmDialog id="dlgConfirmacao" global="true">

@@ -1,47 +1,64 @@
 package br.com.neple.util;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
+
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
-import org.apache.shiro.realm.Realm;
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.subject.PrincipalCollection;
 
 import br.com.neple.dao.UsuarioDAO;
+import br.com.neple.domain.Usuario;
+import br.com.neple.enumeracao.TipoUsuario;
 
-public class NepleRealm implements Realm {
-	private final String NAME = "NepleRealm";
-
+@Named
+@RequestScoped
+public class NepleRealm extends AuthorizingRealm {
 	@Override
-	public AuthenticationInfo getAuthenticationInfo(AuthenticationToken token)
-			throws AuthenticationException {
-		String principal = (String) token.getPrincipal();
+	protected AuthenticationInfo doGetAuthenticationInfo(
+			AuthenticationToken token) throws AuthenticationException {
+		String email = (String) token.getPrincipal();
 
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
-		String credencial = usuarioDAO.buscarCredencial(principal);
+		Usuario usuario = usuarioDAO.buscar(email);
 
-		if (credencial != null) {
-			AuthenticationInfo info = new SimpleAuthenticationInfo(principal,
-					credencial, getName());
+		if (usuario != null) {
+			String senha = usuario.getSenha();
+			AuthenticationInfo info = new SimpleAuthenticationInfo(email,
+					senha, getName());
 
 			SimpleCredentialsMatcher matcher = new SimpleCredentialsMatcher();
 			boolean credentialsMatch = matcher.doCredentialsMatch(token, info);
-			
+
 			if (credentialsMatch) {
 				return info;
 			}
 		}
+
+		throw new AuthenticationException(Mensagens.USUARIO_SENHA_INVALIDOS);
+	}
+
+	@Override
+	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection collection) {
+		UsuarioDAO usuarioDAO = new UsuarioDAO();
+		Usuario usuario = usuarioDAO.buscar(collection
+				.getPrimaryPrincipal().toString());
 		
-		throw new AuthenticationException();
-	}
-
-	@Override
-	public String getName() {
-		return NAME;
-	}
-
-	@Override
-	public boolean supports(AuthenticationToken token) {
-		return Boolean.TRUE;
+		Set<String> roles = new HashSet<String>();
+		roles.add(TipoUsuario.getValue(usuario.getTipoUsuario()).getDescricao());
+		
+		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+		info.setRoles(roles);
+		
+		return info;
 	}
 }

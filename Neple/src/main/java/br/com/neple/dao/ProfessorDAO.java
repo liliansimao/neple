@@ -109,4 +109,21 @@ public class ProfessorDAO extends GenericDAO<Professor> {
 		}
 		return resultado;
 	}
+	
+	public Professor buscar(String email) {
+		Professor resultado = null;
+		Session sessao = HibernateUtil.getSessionFactory().openSession();
+		try {
+			Criteria consulta = sessao.createCriteria(Professor.class);
+			consulta.createAlias("usuario", "u");
+			consulta.createAlias("u.fatec", "f");
+			consulta.add(Restrictions.eq("u.email", email));
+			resultado = (Professor) consulta.uniqueResult();
+		} catch (RuntimeException runtimeException) {
+			throw runtimeException;
+		} finally {
+			sessao.close();
+		}
+		return resultado;
+	}
 }

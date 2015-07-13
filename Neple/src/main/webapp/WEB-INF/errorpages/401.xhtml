@@ -8,22 +8,17 @@
 	template="/WEB-INF/templates/modeloPublic.xhtml">
 
 	<ui:define name="conteudo">
-		<p:dialog id="dialogo" header="Autenticação" closable="false"
+		<p:dialog id="dialogo" header="Erro" closable="false"
 			draggable="false" resizable="false" visible="true">
-			<h:form id="formulario">
-				<h:panelGrid id="painel" columns="2">
-					<p:outputLabel value="E-mail: *" />
-					<p:inputText value="#{autenticacaoBean.usuario.email}" />
-
-					<p:outputLabel value="Senha: *" />
-					<p:password value="#{autenticacaoBean.usuario.senha}" />
+			<h:form>
+				<h:panelGrid columns="2">
+					<p:graphicImage library="images" name="notificationWarning.png" />
+					<h:outputText
+						value="Acesso não autorizado. Pressione o botão a seguir para voltar." />
 				</h:panelGrid>
 
-				<h:panelGrid columns="2">
-					<p:commandButton value="Entrar"
-						actionListener="#{autenticacaoBean.autenticar}"
-						update=":mensagem :formulario:painel" />
-					<p:button value="Primeiro Acesso" outcome="pretty:primeiroacesso" />
+				<h:panelGrid columns="1">
+					<p:button value="Voltar" outcome="pretty:principal" />
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>

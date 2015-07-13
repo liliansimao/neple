@@ -8,6 +8,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import br.com.neple.domain.Usuario;
+import br.com.neple.enumeracao.TipoUsuario;
 import br.com.neple.util.HibernateUtil;
 
 public class UsuarioDAO extends GenericDAO<Usuario> {	
@@ -18,7 +19,15 @@ public class UsuarioDAO extends GenericDAO<Usuario> {
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		try {
 			Criteria consulta = sessao.createCriteria(Usuario.class);
+			
+			consulta.createAlias("fatec", "f");
+			
+			consulta.add(Restrictions.ne("tipoUsuario", TipoUsuario.ALUNO.getSigla()));
+			consulta.add(Restrictions.ne("tipoUsuario", TipoUsuario.PROFESSOR.getSigla()));
+			
 			consulta.addOrder(Order.asc("nome"));
+			consulta.addOrder(Order.asc("f.nome"));
+			
 			resultado = consulta.list();
 		} catch (RuntimeException runtimeException) {
 			throw runtimeException;
@@ -28,18 +37,57 @@ public class UsuarioDAO extends GenericDAO<Usuario> {
 		return resultado;
 	}
 	
-	public String buscarCredencial(String principal){
+	@SuppressWarnings("unchecked")
+	public List<Usuario> listarNaoAtivos() {
+		List<Usuario> resultado = null;
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		try {
 			Criteria consulta = sessao.createCriteria(Usuario.class);
-			consulta.add(Restrictions.eq("email", principal));
-			Usuario usuario = (Usuario) consulta.uniqueResult();
-			String credencial = usuario != null ? usuario.getSenha() : null;
-			return credencial;
+			
+			consulta.createAlias("fatec", "f");
+			
+			consulta.add(Restrictions.eq("ativo", Boolean.FALSE));
+			
+			consulta.addOrder(Order.asc("nome"));
+			consulta.addOrder(Order.asc("f.nome"));
+			
+			resultado = consulta.list();
 		} catch (RuntimeException runtimeException) {
 			throw runtimeException;
 		} finally {
 			sessao.close();
 		}
+		return resultado;
+	}
+	
+	public Usuario buscar(Long codigo) {
+		Usuario resultado = null;
+		Session sessao = HibernateUtil.getSessionFactory().openSession();
+		try {
+			Criteria consulta = sessao.createCriteria(Usuario.class);
+			consulta.createAlias("fatec", "f");
+			consulta.add(Restrictions.idEq(codigo));
+			resultado = (Usuario) consulta.uniqueResult();
+		} catch (RuntimeException runtimeException) {
+			throw runtimeException;
+		} finally {
+			sessao.close();
+		}
+		return resultado;
+	}
+	
+	public Usuario buscar(String email){
+		Usuario resultado = null;
+		Session sessao = HibernateUtil.getSessionFactory().openSession();
+		try {
+			Criteria consulta = sessao.createCriteria(Usuario.class);
+			consulta.add(Restrictions.eq("email", email));
+			resultado = (Usuario) consulta.uniqueResult();
+		} catch (RuntimeException runtimeException) {
+			throw runtimeException;
+		} finally {
+			sessao.close();
+		}
+		return resultado;
 	}
 }

@@ -11,28 +11,38 @@
 	</url-mapping>
 
 	<url-mapping id="fatec">
-		<pattern value="/admin/fatec" />
-		<view-id value="/pages/admin/fatec.xhtml" />
+		<pattern value="/fatec" />
+		<view-id value="/pages/protected/fatec.xhtml" />
 	</url-mapping>
 	
 	<url-mapping id="curso">
-		<pattern value="/admin/curso" />
-		<view-id value="/pages/admin/curso.xhtml" />
+		<pattern value="/curso" />
+		<view-id value="/pages/protected/curso.xhtml" />
 	</url-mapping>
 	
 	<url-mapping id="usuario">
-		<pattern value="/admin/usuario" />
-		<view-id value="/pages/admin/usuario.xhtml" />
+		<pattern value="/usuario" />
+		<view-id value="/pages/protected/usuario.xhtml" />
 	</url-mapping>
 	
 	<url-mapping id="aluno">
-		<pattern value="/admin/aluno" />
-		<view-id value="/pages/admin/aluno.xhtml" />
+		<pattern value="/aluno" />
+		<view-id value="/pages/protected/aluno.xhtml" />
 	</url-mapping>
 	
 	<url-mapping id="professor">
-		<pattern value="/admin/professor" />
-		<view-id value="/pages/admin/professor.xhtml" />
+		<pattern value="/professor" />
+		<view-id value="/pages/protected/professor.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="liberacao">
+		<pattern value="/liberacao" />
+		<view-id value="/pages/protected/liberacao.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="alocacao">
+		<pattern value="/alocacao" />
+		<view-id value="/pages/protected/alocacao.xhtml" />
 	</url-mapping>
 	
 	<url-mapping id="autenticacao">
@@ -44,5 +54,4 @@
 		<pattern value="/primeiroacesso" />
 		<view-id value="/pages/public/primeiroAcesso.xhtml" />
 	</url-mapping>
-
 </pretty-config>

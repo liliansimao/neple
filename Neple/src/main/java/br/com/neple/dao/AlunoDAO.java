@@ -77,9 +77,9 @@ public class AlunoDAO extends GenericDAO<Aluno> {
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		try {
 			Criteria consulta = sessao.createCriteria(Aluno.class);
-			consulta.createAlias("usuario", "u");
+			consulta.createAlias("uusuario", "u");
 			consulta.createAlias("u.fatec", "f");
-			consulta.add(Restrictions.eq("u.tipoUsuario",
+			consulta.add(Restrictions.eq("tipoUsuario",
 					TipoUsuario.ALUNO.getSigla()));
 			consulta.addOrder(Order.asc("u.nome"));
 			consulta.addOrder(Order.asc("f.nome"));
