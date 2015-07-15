@@ -18,74 +18,75 @@
 		<h:form id="frmPesquisa">
 			<p:toolbar style="height: 25px; margin-bottom: 5px;">
 				<p:toolbarGroup>
-					<h:outputText value="#{msgs.cabecalhoFatecListagem}" />
+					<h:outputFormat value="Fatec - Listagem" />
 				</p:toolbarGroup>
 			</p:toolbar>
-			
+
 			<p:dataTable id="tblPesquisa" widgetVar="wvTblPesquisa"
 				value="#{fatecBean.fatecs}" var="fatec" paginator="true" rows="7"
-				emptyMessage="Nenhum registro encontrado."
+				emptyMessage="Nenhum registro encontrado"
 				tableStyle="table-layout: auto;">
-				<p:column headerText="#{msgs.campoNome}" filterBy="#{fatec.nome}"
+				<p:column headerText="Nome" filterBy="#{fatec.nome}"
 					filterMatchMode="contains" sortBy="#{fatec.nome}">
 					#{fatec.nome}
 				</p:column>
 
-				<p:column headerText="#{msgs.campoCidade}" filterBy="#{fatec.cidade}"
-					filterMatchMode="contains" sortBy="#{fatec.cidade}">
+				<p:column headerText="Cidade"
+					filterBy="#{fatec.cidade}" filterMatchMode="contains"
+					sortBy="#{fatec.cidade}">
 					#{fatec.cidade}
 				</p:column>
 
-				<p:column headerText="#{msgs.colunaOpcoes}" style="text-align: center;">
+				<p:column headerText="Opções"
+					style="text-align: center;">
 					<p:commandButton icon="ui-icon-trash"
 						actionListener="#{fatecBean.excluir}"
 						update=":msgGlobal :frmPesquisa:tblPesquisa"
 						oncomplete="manipularPedidoExcluir(xhr, status, args);"
-						title="#{msgs.botaoExcluir}">
+						title="Excluir">
 						<f:attribute name="codigo" value="#{fatec.codigo}" />
 						<p:confirm header="#{msgs.cabecalhoConfirmacao}"
-							message="#{msgs.confirmacaoExclusao}"
-							icon="ui-icon-alert" />
+							message="#{msgs.confirmacaoExclusao}" icon="ui-icon-alert" />
 					</p:commandButton>
 					<p:commandButton icon="ui-icon-pencil"
 						actionListener="#{fatecBean.editar}"
 						oncomplete="PF('dlgCadastro').show();"
-						update=":frmCadastro:pnlCadastro"
-						title="#{msgs.botaoEditar}">
+						update=":frmCadastro:pnlCadastro" title="Editar">
 						<f:attribute name="codigo" value="#{fatec.codigo}" />
 					</p:commandButton>
 				</p:column>
 
 				<f:facet name="header">
-					<p:commandButton value="#{msgs.botaoNovo}" actionListener="#{fatecBean.novo}"
-						icon="ui-icon-plus" oncomplete="PF('dlgCadastro').show();"
+					<p:commandButton value="Novo"
+						actionListener="#{fatecBean.novo}" icon="ui-icon-plus"
+						oncomplete="PF('dlgCadastro').show();"
 						update=":frmCadastro:pnlCadastro" />
 				</f:facet>
 			</p:dataTable>
 
 			<p:confirmDialog id="dlgConfirmacao" global="true">
-				<p:commandButton value="#{msgs.botaoSim}" type="button"
+				<p:commandButton value="Sim" type="button"
 					styleClass="ui-confirmdialog-yes" icon="ui-icon-check">
 				</p:commandButton>
-				<p:commandButton value="#{msgs.botaoNao}" type="button"
+				<p:commandButton value="#Não" type="button"
 					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
 			</p:confirmDialog>
 		</h:form>
 
 		<p:dialog widgetVar="dlgCadastro" modal="true" appendTo="@(body)"
 			closable="true" draggable="false" resizable="false"
-			header="#{msgs.cabecalhoFatecCadastro}">
+			header="Fatec - Cadastro">
 			<h:form id="frmCadastro">
 				<h:panelGrid id="pnlCadastro" columns="2">
-					<p:outputLabel value="#{msgs.campoNome}: *" />
+					<p:outputLabel value="Nome: *" />
 					<p:inputText maxlength="50" size="30"
 						value="#{fatecBean.fatec.nome}" />
-						
-					<p:outputLabel value="#{msgs.campoCidade}: *" />
+
+					<p:outputLabel value="Cidade: *" />
 					<p:inputText maxlength="50" size="30"
 						value="#{fatecBean.fatec.cidade}" />
 
-					<p:outputLabel value="#{msgs.campoCodigoSIGA}: *" />
+					<p:outputLabel value="Código da Fatec no SIGA: *" />
 					<p:inputText maxlength="10" size="15"
 						value="#{fatecBean.fatec.codigoFatecSIGA}">
 						<pe:keyFilter regEx="/[\d]/" />
@@ -94,7 +95,7 @@
 
 				<p:separator />
 				<h:panelGrid columns="1">
-					<p:commandButton value="#{msgs.botaoSalvar}"
+					<p:commandButton value="Salvar"
 						actionListener="#{fatecBean.salvar}"
 						update=":msgGlobal :frmCadastro:pnlCadastro :frmPesquisa:tblPesquisa"
 						icon="ui-icon-disk"

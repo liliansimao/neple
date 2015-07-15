@@ -85,9 +85,9 @@ public class FatecBean extends GenericBean {
 
 			this.listar();
 			salvou = true;
-			Messages.addGlobalInfo(Funcoes.getMessage("registroSalvo"));
+			Messages.addGlobalInfo(Funcoes.getMessage("registro.salvo"));
 		} catch (ConstraintViolationException constraintViolationException) {
-			Messages.addGlobalWarn(Funcoes.getMessage("registroUnico"));
+			Messages.addGlobalWarn(Funcoes.getMessage("registro.unico"));
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
@@ -107,9 +107,9 @@ public class FatecBean extends GenericBean {
 
 			this.listar();
 			excluiu = Boolean.TRUE;
-			Messages.addGlobalInfo(Funcoes.getMessage("registroRemovido"));
+			Messages.addGlobalInfo(Funcoes.getMessage("registro.removido"));
 		} catch (ConstraintViolationException constraintViolationException) {
-			Messages.addGlobalWarn(Funcoes.getMessage("registroDependente"));
+			Messages.addGlobalWarn(Funcoes.getMessage("registro.dependente"));
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));

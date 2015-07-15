@@ -18,13 +18,13 @@
 		<h:form id="frmPesquisa">
 			<p:toolbar style="height: 25px; margin-bottom: 5px;">
 				<p:toolbarGroup>
-					<h:outputText value="Curso - Listagem" />
+					<h:outputFormat value="Curso - Listagem" />
 				</p:toolbarGroup>
 			</p:toolbar>
 
 			<p:dataTable id="tblPesquisa" widgetVar="wvTblPesquisa"
 				value="#{cursoBean.cursos}" var="curso" paginator="true" rows="5"
-				emptyMessage="Nenhum registro encontrado."
+				emptyMessage="Nenhum registro encontrado"
 				tableStyle="table-layout: auto;">
 				<p:column headerText="Fatec" filterBy="#{curso.fatec.nome}"
 					sortBy="#{curso.fatec.nome}">
@@ -85,7 +85,7 @@
 						converter="omnifaces.SelectItemsConverter" filter="true"
 						filterMatchMode="contains">
 						<f:selectItem noSelectionOption="true"
-							itemLabel="Selecione uma Fatec" />
+							itemLabel="Selecione uma Fatec" />	
 						<f:selectItems value="#{cursoBean.fatecs}" var="fatec"
 							itemValue="#{fatec}" itemLabel="#{fatec.nome}" />
 					</p:selectOneMenu>
