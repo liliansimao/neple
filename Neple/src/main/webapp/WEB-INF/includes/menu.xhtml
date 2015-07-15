@@ -3,28 +3,38 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
+	xmlns:shiro="http://shiro.apache.org/tags"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
 	<h:form id="frmMenu">
 		<p:panelMenu id="menuPrincipal">
 			<p:submenu id="menuArquivo" label="Arquivo">
-				<p:menuitem id="menuItemPrincipal" value="Principal" />
+				<p:menuitem id="menuItemPrincipal" value="Principal"
+					outcome="pretty:principal" />
 				<p:menuitem id="menuItemSair" value="Sair"
 					actionListener="#{autenticacaoBean.sair}" />
 			</p:submenu>
 
 			<p:submenu id="menuCadastros" label="Cadastros">
-				<p:menuitem id="menuItemCurso" value="Curso" outcome="pretty:curso" />
-				<p:menuitem id="menuItemFatec" value="Fatec" outcome="pretty:fatec" />
-				<p:menuitem id="menuItemUsuario" value="Usuário"
-					outcome="pretty:usuario" />
-				<p:menuitem id="menuItemAluno" value="Aluno" outcome="pretty:aluno" />
-				<p:menuitem id="menuItemProfessor" value="Professor"
-					outcome="pretty:professor" />
-				<p:menuitem id="menuItemLiberacao" value="Liberação de Acesso"
-					outcome="pretty:liberacao" />
-				<p:menuitem id="menuItemAlocacao" value="Alocação do Professor"
-					outcome="pretty:alocacao" />
+				<shiro:hasRole name="Administrador">
+					<p:menuitem id="menuItemCurso" value="Curso" outcome="pretty:curso" />
+					<p:menuitem id="menuItemFatec" value="Fatec" outcome="pretty:fatec" />
+					<p:menuitem id="menuItemUsuario" value="Usuário"
+						outcome="pretty:usuario" />
+					<p:menuitem id="menuItemLiberacao" value="Liberação de Acesso"
+						outcome="pretty:liberacao" />
+				</shiro:hasRole>
+
+				<shiro:hasAnyRoles name="Administrador, Aluno, Professor">
+					<p:menuitem id="menuItemAluno" value="Aluno" outcome="pretty:aluno" />
+				</shiro:hasAnyRoles>
+
+				<shiro:hasAnyRoles name="Administrador, Professor">
+					<p:menuitem id="menuItemProfessor" value="Professor"
+						outcome="pretty:professor" />
+					<p:menuitem id="menuItemAlocacao" value="Alocação do Professor"
+						outcome="pretty:alocacao" />
+				</shiro:hasAnyRoles>
 			</p:submenu>
 		</p:panelMenu>
 	</h:form>

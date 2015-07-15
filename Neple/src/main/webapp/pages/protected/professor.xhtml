@@ -5,6 +5,7 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:shiro="http://shiro.apache.org/tags"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	template="/WEB-INF/templates/modeloProtected.xhtml">
 
@@ -21,10 +22,10 @@
 					<h:outputText value="Professor - Listagem" />
 				</p:toolbarGroup>
 			</p:toolbar>
-			
+
 			<p:dataTable id="tblPesquisa" widgetVar="wvTblPesquisa"
-				value="#{professorBean.professores}" var="professor" paginator="true"
-				rows="7" emptyMessage="Nenhum registro encontrado."
+				value="#{professorBean.professores}" var="professor"
+				paginator="true" rows="7" emptyMessage="Nenhum registro encontrado."
 				tableStyle="table-layout: auto;">
 				<p:column headerText="Nome" filterBy="#{professor.usuario.nome}"
 					filterMatchMode="contains" sortBy="#{professor.usuario.nome}">
@@ -49,16 +50,17 @@
 				</p:column>
 
 				<p:column headerText="Opções" style="text-align: center;">
-					<p:commandButton icon="ui-icon-trash"
-						actionListener="#{professorBean.excluir}"
-						update=":msgGlobal :frmPesquisa:tblPesquisa"
-						oncomplete="manipularPedidoExcluir(xhr, status, args);"
-						rendered="#{professorBean.ehAdministrador()}">
-						<f:attribute name="codigo" value="#{professor.codigo}" />
-						<p:confirm header="Confirmação"
-							message="Deseja excluir o professor selecionado?"
-							icon="ui-icon-alert" />
-					</p:commandButton>
+					<shiro:hasRole name="Administrador">
+						<p:commandButton icon="ui-icon-trash"
+							actionListener="#{professorBean.excluir}"
+							update=":msgGlobal :frmPesquisa:tblPesquisa"
+							oncomplete="manipularPedidoExcluir(xhr, status, args);">
+							<f:attribute name="codigo" value="#{professor.codigo}" />
+							<p:confirm header="Confirmação"
+								message="Deseja excluir o professor selecionado?"
+								icon="ui-icon-alert" />
+						</p:commandButton>
+					</shiro:hasRole>
 					<p:commandButton icon="ui-icon-pencil"
 						actionListener="#{professorBean.editar}"
 						oncomplete="PF('dlgCadastro').show();"
@@ -67,14 +69,14 @@
 					</p:commandButton>
 				</p:column>
 
-				<p:outputPanel rendered="#{professorBean.ehAdministrador()}">
+				<shiro:hasRole name="Administrador">
 					<f:facet name="header">
 						<p:commandButton value="Novo"
 							actionListener="#{professorBean.novo}" icon="ui-icon-plus"
 							oncomplete="PF('dlgCadastro').show();"
 							update=":msgGlobal :frmCadastro:pnlCadastro" />
 					</f:facet>
-				</p:outputPanel>
+				</shiro:hasRole>
 			</p:dataTable>
 
 			<p:confirmDialog id="dlgConfirmacao" global="true">

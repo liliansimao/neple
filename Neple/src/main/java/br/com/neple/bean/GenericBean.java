@@ -39,20 +39,4 @@ public class GenericBean implements Serializable {
 		boolean ehAluno = usuario.hasRole(TipoUsuario.ALUNO.getDescricao());
 		return ehAluno;
 	}
-
-	public boolean ehAdministradorOuProfessor() {
-		Subject usuario = SecurityUtils.getSubject();
-		boolean ehAdministrador = usuario.hasRole(TipoUsuario.ADMINISTRADOR
-				.getDescricao())
-				|| usuario.hasRole(TipoUsuario.PROFESSOR.getDescricao());
-		return ehAdministrador;
-	}
-	
-	public boolean ehAdministradorOuAluno() {
-		Subject usuario = SecurityUtils.getSubject();
-		boolean ehAdministrador = usuario.hasRole(TipoUsuario.ADMINISTRADOR
-				.getDescricao())
-				|| usuario.hasRole(TipoUsuario.ALUNO.getDescricao());
-		return ehAdministrador;
-	}
 }

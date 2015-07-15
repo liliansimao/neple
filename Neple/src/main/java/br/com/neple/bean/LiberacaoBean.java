@@ -12,7 +12,7 @@ import org.omnifaces.util.Messages;
 
 import br.com.neple.dao.UsuarioDAO;
 import br.com.neple.domain.Usuario;
-import br.com.neple.util.Mensagens;
+import br.com.neple.util.Funcoes;
 
 @SuppressWarnings("serial")
 @Named
@@ -63,7 +63,7 @@ public class LiberacaoBean extends GenericBean {
 			this.usuarioDAO.excluir(this.usuario);
 
 			this.listar();
-			Messages.addGlobalInfo(Mensagens.USUARIO_LIBERADO);
+			Messages.addGlobalInfo(Funcoes.getMessage("usuario.liberado"));
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));

@@ -5,6 +5,7 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:shiro="http://shiro.apache.org/tags"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
 <ui:insert name="metadata" />
@@ -35,12 +36,21 @@
 						style="display: block; margin-left: auto; margin-right: auto;" />
 					<p:toolbar>
 						<f:facet name="left">
-							<h:outputText value="Usuário: Sérgio" />
+							<h:outputText value="Usuário: " />
+							<shiro:principal property="nome" />
+
+							<h:outputText value=" (" />
+							<shiro:principal property="email" />
+							<h:outputText value=")" />
+
 							<br />
-							<h:outputText value="Perfil: Administrador" />
+
+							<h:outputText value="Perfil: " />
+							<shiro:principal property="tipoUsuarioExtenso" />
 						</f:facet>
 						<f:facet name="right">
-							<p:commandButton value="Sair" />
+							<p:commandButton value="Sair"
+								actionListener="#{autenticacaoBean.sair}" />
 						</f:facet>
 					</p:toolbar>
 				</h:form>

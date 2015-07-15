@@ -24,7 +24,7 @@ import br.com.neple.domain.Usuario;
 import br.com.neple.enumeracao.Acao;
 import br.com.neple.enumeracao.TipoUsuario;
 import br.com.neple.util.Criptografia;
-import br.com.neple.util.Mensagens;
+import br.com.neple.util.Funcoes;
 
 @SuppressWarnings("serial")
 @Named
@@ -136,9 +136,9 @@ public class AlunoBean extends GenericBean {
 
 			this.listar();
 			salvou = true;
-			Messages.addGlobalInfo(Mensagens.REGISTRO_SALVO);
+			Messages.addGlobalInfo(Funcoes.getMessage("registro.salvo"));
 		} catch (ConstraintViolationException constraintViolationException) {
-			Messages.addGlobalWarn(Mensagens.REGISTRO_UNICO);
+			Messages.addGlobalWarn(Funcoes.getMessage("registro.unico"));
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
@@ -160,9 +160,9 @@ public class AlunoBean extends GenericBean {
 
 			this.listar();
 			excluiu = true;
-			Messages.addGlobalInfo(Mensagens.REGISTRO_REMOVIDO);
+			Messages.addGlobalInfo(Funcoes.getMessage("registro.removido"));
 		} catch (ConstraintViolationException constraintViolationException) {
-			Messages.addGlobalWarn(Mensagens.REGISTRO_DEPENDENTE);
+			Messages.addGlobalWarn(Funcoes.getMessage("registro.dependente"));
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));

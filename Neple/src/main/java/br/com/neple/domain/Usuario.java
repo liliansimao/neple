@@ -48,9 +48,6 @@ public class Usuario extends GenericDomain {
 	@Basic(optional = false)
 	@NotNull(message = "O campo TIPO DO USUÁRIO é obrigatório")
 	private Character tipoUsuario;
-	
-	@Transient
-	private String tipoUsuarioExtenso;
 
 	@Basic(optional = false)
 	@NotNull(message = "O campo ATIVO é obrigatório")
@@ -116,14 +113,6 @@ public class Usuario extends GenericDomain {
 	public void setTipoUsuario(Character tipoUsuario) {
 		this.tipoUsuario = tipoUsuario;
 	}
-	
-	public void setTipoUsuarioExtenso(String tipoUsuarioExtenso) {
-		this.tipoUsuarioExtenso = tipoUsuarioExtenso;
-	}
-	
-	public String getTipoUsuarioExtenso() {
-		return TipoUsuario.getValue(this.tipoUsuario).getDescricao();
-	}
 
 	public Boolean getAtivo() {
 		return ativo;
@@ -171,5 +160,10 @@ public class Usuario extends GenericDomain {
 	
 	public void setAluno(Aluno aluno) {
 		this.aluno = aluno;
+	}
+	
+	@Transient
+	public String getTipoUsuarioExtenso() {
+		return TipoUsuario.getValue(this.tipoUsuario).getDescricao();
 	}
 }

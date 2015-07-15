@@ -25,7 +25,7 @@ import br.com.neple.enumeracao.Acao;
 import br.com.neple.enumeracao.Idioma;
 import br.com.neple.enumeracao.TipoUsuario;
 import br.com.neple.util.Criptografia;
-import br.com.neple.util.Mensagens;
+import br.com.neple.util.Funcoes;
 
 @SuppressWarnings("serial")
 @Named
@@ -74,10 +74,10 @@ public class ProfessorBean extends GenericBean {
 			if (this.ehAdministrador()) {
 				this.professores = this.professorDAO.listar();
 			} else if(this.ehProfessor()){
-				Subject usuario = SecurityUtils.getSubject();
-				String email = (String) usuario.getPrincipal();
+				Subject subject = SecurityUtils.getSubject();
+				Usuario usuario = (Usuario) subject.getPrincipal();
 				
-				Professor professor = this.professorDAO.buscarPorEmail(email);
+				Professor professor = this.professorDAO.buscarPorCodigo(usuario.getCodigo());
 				
 				this.professores = new ArrayList<Professor>();
 				this.professores.add(professor);
@@ -126,9 +126,9 @@ public class ProfessorBean extends GenericBean {
 
 			this.listar();
 			salvou = true;
-			Messages.addGlobalInfo(Mensagens.REGISTRO_SALVO);
+			Messages.addGlobalInfo(Funcoes.getMessage("registro.salvo"));
 		} catch (ConstraintViolationException constraintViolationException) {
-			Messages.addGlobalWarn(Mensagens.REGISTRO_UNICO);
+			Messages.addGlobalWarn(Funcoes.getMessage("registro.unico"));
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
@@ -151,9 +151,9 @@ public class ProfessorBean extends GenericBean {
 
 			this.listar();
 			excluiu = true;
-			Messages.addGlobalInfo(Mensagens.REGISTRO_REMOVIDO);
+			Messages.addGlobalInfo(Funcoes.getMessage("registro.removido"));
 		} catch (ConstraintViolationException constraintViolationException) {
-			Messages.addGlobalWarn(Mensagens.REGISTRO_DEPENDENTE);
+			Messages.addGlobalWarn(Funcoes.getMessage("registro.dependente"));
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
