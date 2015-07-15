@@ -14,6 +14,9 @@
 			<default-locale>pt_BR</default-locale>
 			<supported-locale>en_US</supported-locale>
 		</locale-config>
+		<message-bundle>
+        	br.com.neple.messages.mensagens
+		</message-bundle>
 	</application>
 
 	<!-- Limpa a marcação dos campos da tela quando da erro de validação -->

@@ -23,13 +23,13 @@ import br.com.neple.enumeracao.TipoUsuario;
 
 public class HibernateUtilTest {
 	@Test
+	@Ignore
 	public void conectar(){
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		Assert.assertNotNull(sessao);
 	}
 	
 	@Test
-	@Ignore
 	public void popular(){
 		FatecDAO fatecDAO = new FatecDAO();
 		CursoDAO cursoDAO = new CursoDAO();

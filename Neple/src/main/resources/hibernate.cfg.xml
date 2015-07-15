@@ -10,12 +10,12 @@
 
 		<!-- Configurações da conexão -->
 		<property name="connection.driver_class">org.postgresql.Driver</property>
-		<property name="connection.url">jdbc:postgresql://127.0.0.1:5432/neple</property>
-		<property name="connection.username">postgres</property>
-		<property name="connection.password">q1w2e3r4</property>
-<!-- 		<property name="connection.url">jdbc:postgresql://postgres51311-teste123.jelasticlw.com.br:5432/neple</property> -->
-<!-- 		<property name="connection.username">webadmin</property> -->
-<!-- 		<property name="connection.password">ATwmcCsGTk</property> -->
+		<!-- <property name="connection.url">jdbc:postgresql://127.0.0.1:5432/neple</property> -->
+		<!-- <property name="connection.username">postgres</property> -->
+		<!-- <property name="connection.password">q1w2e3r4</property> -->
+		<property name="connection.url">jdbc:postgresql://postgres57032-env-6765668.jelasticlw.com.br:5432/neple</property>
+		<property name="connection.username">webadmin</property>
+		<property name="connection.password">KyUwVy6Y48</property>
 
 		<!-- Pool de conexões JDBC -->
 		<property name="hibernate.c3p0.min_size">5</property>
@@ -32,9 +32,9 @@
 		<property name="format_sql">true</property>
 
 		<!-- Cria as tabelas -->
-		<property name="hbm2ddl.auto">update</property>
+		<property name="hbm2ddl.auto">validate</property>
 
-		<!-- Classes mapeadas -->	
+		<!-- Classes mapeadas -->
 		<mapping class="br.com.neple.domain.Alocacao" />
 		<mapping class="br.com.neple.domain.Aluno" />
 		<mapping class="br.com.neple.domain.Curso" />

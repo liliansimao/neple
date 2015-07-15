@@ -73,11 +73,7 @@
 						<p:outputLabel value="Apresentação: *" />
 						<p:inputTextarea
 							value="#{primeiroAcessoBean.professor.apresentacao}"
-							maxlength="500" cols="50" rows="3" autoResize="false"
-							converter="toUpperCaseConverter">
-							<pe:keyFilter regEx="/[a-z\s]/i" />
-							<p:ajax event="blur" update="@this" global="false" />
-						</p:inputTextarea>
+							maxlength="500" cols="50" rows="3" autoResize="false" />
 
 						<p:outputLabel value="Telefone de Contato: *" />
 						<h:panelGroup>
@@ -90,8 +86,7 @@
 						</h:panelGroup>
 
 						<p:outputLabel value="Idioma: *" />
-						<p:selectOneRadio
-							value="#{primeiroAcessoBean.professor.idioma}">
+						<p:selectOneRadio value="#{primeiroAcessoBean.professor.idioma}">
 							<f:selectItem itemValue="I" itemLabel="Inglês" />
 							<f:selectItem itemValue="E" itemLabel="Espanhol" />
 						</p:selectOneRadio>
@@ -102,8 +97,8 @@
 					<p:separator rendered="#{primeiroAcessoBean.ehAluno()}" />
 					<h:panelGrid columns="2" rendered="#{primeiroAcessoBean.ehAluno()}">
 						<p:outputLabel value="RA: *" />
-						<p:inputText value="#{primeiroAcessoBean.aluno.ra}"
-							maxlength="11" size="15">
+						<p:inputText value="#{primeiroAcessoBean.aluno.ra}" maxlength="11"
+							size="15">
 							<pe:keyFilter regEx="/[\d]/" />
 						</p:inputText>
 
@@ -137,7 +132,6 @@
 					update=":mensagem :formulario:painel :formulario:painelProfessor :formulario:painelAluno" />
 				<p:button value="Voltar" outcome="pretty:autenticacao" />
 			</h:panelGrid>
-
 		</h:form>
 
 	</ui:define>
