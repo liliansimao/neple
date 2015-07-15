@@ -52,7 +52,7 @@ public class Usuario extends GenericDomain {
 	@Basic(optional = false)
 	@NotNull(message = "O campo ATIVO é obrigatório")
 	private Boolean ativo;
-	
+
 	@Transient
 	private String ativoExtenso;
 
@@ -69,7 +69,7 @@ public class Usuario extends GenericDomain {
 	@OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY)
 	@PrimaryKeyJoinColumn
 	private Professor professor;
-	
+
 	@OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY)
 	@PrimaryKeyJoinColumn
 	private Aluno aluno;
@@ -121,11 +121,11 @@ public class Usuario extends GenericDomain {
 	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
 	}
-	
+
 	public String getAtivoExtenso() {
 		return (this.ativo ? "Sim" : "Não");
 	}
-	
+
 	public void setAtivoExtenso(String ativoExtenso) {
 		this.ativoExtenso = ativoExtenso;
 	}
@@ -145,25 +145,26 @@ public class Usuario extends GenericDomain {
 	public void setFatec(Fatec fatec) {
 		this.fatec = fatec;
 	}
-	
+
 	public Professor getProfessor() {
 		return professor;
 	}
-	
+
 	public void setProfessor(Professor professor) {
 		this.professor = professor;
 	}
-	
+
 	public Aluno getAluno() {
 		return aluno;
 	}
-	
+
 	public void setAluno(Aluno aluno) {
 		this.aluno = aluno;
 	}
-	
+
 	@Transient
 	public String getTipoUsuarioExtenso() {
-		return TipoUsuario.getValue(this.tipoUsuario).getDescricao();
+		return this.tipoUsuario == null ? "" : TipoUsuario.getValue(
+				this.tipoUsuario).getDescricao();
 	}
 }

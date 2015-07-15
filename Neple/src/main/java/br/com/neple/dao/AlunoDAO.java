@@ -76,13 +76,13 @@ public class AlunoDAO extends GenericDAO<Aluno> {
 		List<Aluno> resultado = null;
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		try {
-			Criteria consulta = sessao.createCriteria(Aluno.class);
-			consulta.createAlias("uusuario", "u");
-			consulta.createAlias("u.fatec", "f");
-			consulta.add(Restrictions.eq("tipoUsuario",
+			Criteria consulta = sessao.createCriteria(Aluno.class, "aluno");
+			consulta.createAlias("aluno.usuario", "usuario");
+			consulta.createAlias("usuario.fatec", "fatec");
+			consulta.add(Restrictions.eq("usuario.tipoUsuario",
 					TipoUsuario.ALUNO.getSigla()));
-			consulta.addOrder(Order.asc("u.nome"));
-			consulta.addOrder(Order.asc("f.nome"));
+			consulta.addOrder(Order.asc("usuario.nome"));
+			consulta.addOrder(Order.asc("fatec.nome"));
 			resultado = consulta.list();
 		} catch (RuntimeException runtimeException) {
 			throw runtimeException;
@@ -97,12 +97,37 @@ public class AlunoDAO extends GenericDAO<Aluno> {
 		Aluno resultado = null;
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		try {
-			Criteria consulta = sessao.createCriteria(Aluno.class);
-			consulta.createAlias("usuario", "u");
-			consulta.createAlias("curso", "c");
-			consulta.createAlias("u.fatec", "f");
+			Criteria consulta = sessao.createCriteria(Aluno.class, "aluno");
+			consulta.createAlias("aluno.usuario", "usuario");
+			consulta.createAlias("aluno.curso", "curso");
+			consulta.createAlias("usuario.fatec", "fatec");
 			consulta.add(Restrictions.idEq(codigo));
 			resultado = (Aluno) consulta.uniqueResult();
+		} catch (RuntimeException runtimeException) {
+			throw runtimeException;
+		} finally {
+			sessao.close();
+		}
+		return resultado;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Aluno> buscarPorFatec(Long codigoFatec) {
+		List<Aluno> resultado = null;
+		Session sessao = HibernateUtil.getSessionFactory().openSession(); 
+		try {
+			Criteria consulta = sessao.createCriteria(Aluno.class, "aluno");
+			
+			consulta.createAlias("aluno.usuario", "usuario");
+			consulta.createAlias("usuario.fatec", "fatec");
+			
+			consulta.add(Restrictions.eq("usuario.tipoUsuario",
+					TipoUsuario.ALUNO.getSigla()));
+			consulta.add(Restrictions.eq("fatec.codigo", codigoFatec));
+			
+			consulta.addOrder(Order.asc("usuario.nome"));
+			consulta.addOrder(Order.asc("fatec.nome"));
+			resultado = consulta.list();
 		} catch (RuntimeException runtimeException) {
 			throw runtimeException;
 		} finally {

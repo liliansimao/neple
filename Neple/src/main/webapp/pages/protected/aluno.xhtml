@@ -5,6 +5,7 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:shiro="http://shiro.apache.org/tags"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	template="/WEB-INF/templates/modeloProtected.xhtml">
 
@@ -54,28 +55,35 @@
 				</p:column>
 
 				<p:column headerText="Opções" style="text-align: center;">
-					<p:commandButton icon="ui-icon-trash"
-						actionListener="#{alunoBean.excluir}"
-						update=":msgGlobal :frmPesquisa:tblPesquisa"
-						oncomplete="manipularPedidoExcluir(xhr, status, args);">
-						<f:attribute name="codigo" value="#{aluno.codigo}" />
-						<p:confirm header="Confirmação"
-							message="Deseja excluir o aluno selecionado?"
-							icon="ui-icon-alert" />
-					</p:commandButton>
-					<p:commandButton icon="ui-icon-pencil"
-						actionListener="#{alunoBean.editar}"
-						oncomplete="PF('dlgCadastro').show();"
-						update=":msgGlobal :frmCadastro:pnlCadastro">
-						<f:attribute name="codigo" value="#{aluno.codigo}" />
-					</p:commandButton>
+					<shiro:hasAnyRoles name="Administrador, Professor">
+						<p:commandButton icon="ui-icon-trash"
+							actionListener="#{alunoBean.excluir}"
+							update=":msgGlobal :frmPesquisa:tblPesquisa"
+							oncomplete="manipularPedidoExcluir(xhr, status, args);">
+							<f:attribute name="codigo" value="#{aluno.codigo}" />
+							<p:confirm header="Confirmação"
+								message="Deseja excluir o aluno selecionado?"
+								icon="ui-icon-alert" />
+						</p:commandButton>
+					</shiro:hasAnyRoles>
+
+					<shiro:hasAnyRoles name="Administrador, Aluno, Professor">
+						<p:commandButton icon="ui-icon-pencil"
+							actionListener="#{alunoBean.editar}"
+							oncomplete="PF('dlgCadastro').show();"
+							update=":msgGlobal :frmCadastro:pnlCadastro">
+							<f:attribute name="codigo" value="#{aluno.codigo}" />
+						</p:commandButton>
+					</shiro:hasAnyRoles>
 				</p:column>
 
-				<f:facet name="header">
-					<p:commandButton value="Novo" actionListener="#{alunoBean.novo}"
-						icon="ui-icon-plus" oncomplete="PF('dlgCadastro').show();"
-						update=":msgGlobal :frmCadastro:pnlCadastro" />
-				</f:facet>
+				<shiro:hasAnyRoles name="Administrador, Professor">
+					<f:facet name="header">
+						<p:commandButton value="Novo" actionListener="#{alunoBean.novo}"
+							icon="ui-icon-plus" oncomplete="PF('dlgCadastro').show();"
+							update=":msgGlobal :frmCadastro:pnlCadastro" />
+					</f:facet>
+				</shiro:hasAnyRoles>
 			</p:dataTable>
 
 			<p:confirmDialog id="dlgConfirmacao" global="true">

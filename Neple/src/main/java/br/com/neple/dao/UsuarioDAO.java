@@ -80,8 +80,9 @@ public class UsuarioDAO extends GenericDAO<Usuario> {
 		Usuario resultado = null;
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		try {
-			Criteria consulta = sessao.createCriteria(Usuario.class);
-			consulta.add(Restrictions.eq("email", email));
+			Criteria consulta = sessao.createCriteria(Usuario.class, "usuario");
+			consulta.createAlias("usuario.fatec", "fatec");
+			consulta.add(Restrictions.eq("usuario.email", email));
 			resultado = (Usuario) consulta.uniqueResult();
 		} catch (RuntimeException runtimeException) {
 			throw runtimeException;

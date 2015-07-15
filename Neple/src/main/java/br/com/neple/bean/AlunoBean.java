@@ -10,6 +10,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.hibernate.exception.ConstraintViolationException;
 import org.omnifaces.util.Messages;
 import org.primefaces.context.RequestContext;
@@ -81,7 +83,24 @@ public class AlunoBean extends GenericBean {
 
 	public void listar() {
 		try {
-			this.alunos = this.alunoDAO.listar();
+			if (this.ehAdministrador()) {
+				this.alunos = this.alunoDAO.listar();
+			} else if (this.ehAluno()) {
+				Subject subject = SecurityUtils.getSubject();
+				Usuario usuario = (Usuario) subject.getPrincipal();
+
+				Aluno aluno = this.alunoDAO
+						.buscarPorCodigo(usuario.getCodigo());
+
+				this.alunos = new ArrayList<Aluno>();
+				this.alunos.add(aluno);
+			} else if (this.ehProfessor()) {
+				Subject subject = SecurityUtils.getSubject();
+				Usuario usuario = (Usuario) subject.getPrincipal();
+				Fatec fatec = usuario.getFatec(); 
+
+				this.alunos = this.alunoDAO.buscarPorFatec(fatec.getCodigo());
+			}
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));

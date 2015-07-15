@@ -9,7 +9,6 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authz.RolesAuthorizationFilter;
 
 public class AnyOfRolesAuthorizationFilter extends RolesAuthorizationFilter {
-
 	@Override
 	public boolean isAccessAllowed(ServletRequest request,
 			ServletResponse response, Object mappedValue) throws IOException {
