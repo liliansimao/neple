@@ -93,7 +93,7 @@ public class AlunoDAO extends GenericDAO<Aluno> {
 	}
 
 	@Override
-	public Aluno buscar(Long codigo) {
+	public Aluno buscarPorCodigo(Long codigo) {
 		Aluno resultado = null;
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		try {

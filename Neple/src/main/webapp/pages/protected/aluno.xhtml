@@ -16,6 +16,12 @@
 
 	<ui:define name="conteudo">
 		<h:form id="frmPesquisa">
+			<p:toolbar style="height: 25px; margin-bottom: 5px;">
+				<p:toolbarGroup>
+					<h:outputText value="Aluno - Listagem" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
 			<p:dataTable id="tblPesquisa" widgetVar="wvTblPesquisa"
 				value="#{alunoBean.alunos}" var="aluno" paginator="true" rows="7"
 				emptyMessage="Nenhum registro encontrado."
@@ -50,7 +56,8 @@
 				<p:column headerText="Opções" style="text-align: center;">
 					<p:commandButton icon="ui-icon-trash"
 						actionListener="#{alunoBean.excluir}"
-						update=":msgGlobal :frmPesquisa:tblPesquisa">
+						update=":msgGlobal :frmPesquisa:tblPesquisa"
+						oncomplete="manipularPedidoExcluir(xhr, status, args);">
 						<f:attribute name="codigo" value="#{aluno.codigo}" />
 						<p:confirm header="Confirmação"
 							message="Deseja excluir o aluno selecionado?"

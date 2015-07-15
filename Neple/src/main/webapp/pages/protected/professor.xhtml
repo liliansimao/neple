@@ -16,6 +16,12 @@
 
 	<ui:define name="conteudo">
 		<h:form id="frmPesquisa">
+			<p:toolbar style="height: 25px; margin-bottom: 5px;">
+				<p:toolbarGroup>
+					<h:outputText value="Professor - Listagem" />
+				</p:toolbarGroup>
+			</p:toolbar>
+			
 			<p:dataTable id="tblPesquisa" widgetVar="wvTblPesquisa"
 				value="#{professorBean.professores}" var="professor" paginator="true"
 				rows="7" emptyMessage="Nenhum registro encontrado."
@@ -46,6 +52,7 @@
 					<p:commandButton icon="ui-icon-trash"
 						actionListener="#{professorBean.excluir}"
 						update=":msgGlobal :frmPesquisa:tblPesquisa"
+						oncomplete="manipularPedidoExcluir(xhr, status, args);"
 						rendered="#{professorBean.ehAdministrador()}">
 						<f:attribute name="codigo" value="#{professor.codigo}" />
 						<p:confirm header="Confirmação"

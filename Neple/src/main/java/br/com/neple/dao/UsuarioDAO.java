@@ -76,7 +76,7 @@ public class UsuarioDAO extends GenericDAO<Usuario> {
 		return resultado;
 	}
 	
-	public Usuario buscar(String email){
+	public Usuario buscarPorEmail(String email){
 		Usuario resultado = null;
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		try {

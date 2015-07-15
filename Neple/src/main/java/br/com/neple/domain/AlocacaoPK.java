@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @SuppressWarnings("serial")
 @Embeddable
-public class ProfessorFatecPK implements Serializable {
+public class AlocacaoPK implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
 	@NotNull(message = "O campo PROFESSOR é obrigatório")

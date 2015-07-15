@@ -118,6 +118,7 @@ public class UsuarioBean extends GenericBean {
 	}
 
 	public void excluir(ActionEvent event) {
+		boolean excluiu = false;
 		try {
 			Long codigo = (Long) event.getComponent().getAttributes()
 					.get("codigo");
@@ -125,13 +126,17 @@ public class UsuarioBean extends GenericBean {
 			this.usuarioDAO.excluir(this.usuario);
 
 			this.listar();
+			excluiu = true;
 			Messages.addGlobalInfo(Mensagens.REGISTRO_REMOVIDO);
 		} catch (ConstraintViolationException constraintViolationException) {
 			Messages.addGlobalWarn(Mensagens.REGISTRO_DEPENDENTE);
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
-		} 
+		} finally {
+			RequestContext.getCurrentInstance().addCallbackParam("excluiu",
+					excluiu);
+		}
 	}
 
 	public void editar(ActionEvent event) {
@@ -140,7 +145,7 @@ public class UsuarioBean extends GenericBean {
 
 			Long codigo = (Long) event.getComponent().getAttributes()
 					.get("codigo");
-			
+
 			this.usuario = this.usuarioDAO.buscar(codigo);
 			this.usuario
 					.setSenha(Criptografia.decifrar(this.usuario.getSenha()));

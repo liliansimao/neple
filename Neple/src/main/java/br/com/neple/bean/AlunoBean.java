@@ -151,19 +151,24 @@ public class AlunoBean extends GenericBean {
 	}
 
 	public void excluir(ActionEvent event) {
+		boolean excluiu = false;
 		try {
 			Long codigo = (Long) event.getComponent().getAttributes()
 					.get("codigo");
-			this.aluno = this.alunoDAO.buscar(codigo);
+			this.aluno = this.alunoDAO.buscarPorCodigo(codigo);
 			this.alunoDAO.excluir(this.aluno);
 
 			this.listar();
+			excluiu = true;
 			Messages.addGlobalInfo(Mensagens.REGISTRO_REMOVIDO);
 		} catch (ConstraintViolationException constraintViolationException) {
 			Messages.addGlobalWarn(Mensagens.REGISTRO_DEPENDENTE);
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
+		} finally {
+			RequestContext.getCurrentInstance().addCallbackParam("excluiu",
+					excluiu);
 		}
 	}
 
@@ -173,7 +178,7 @@ public class AlunoBean extends GenericBean {
 
 			Long codigo = (Long) event.getComponent().getAttributes()
 					.get("codigo");
-			this.aluno = this.alunoDAO.buscar(codigo);
+			this.aluno = this.alunoDAO.buscarPorCodigo(codigo);
 
 			this.aluno.getUsuario().setSenha(
 					Criptografia.decifrar(this.aluno.getUsuario().getSenha()));

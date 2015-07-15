@@ -77,7 +77,7 @@ public class ProfessorBean extends GenericBean {
 				Subject usuario = SecurityUtils.getSubject();
 				String email = (String) usuario.getPrincipal();
 				
-				Professor professor = this.professorDAO.buscar(email);
+				Professor professor = this.professorDAO.buscarPorEmail(email);
 				
 				this.professores = new ArrayList<Professor>();
 				this.professores.add(professor);
@@ -142,19 +142,24 @@ public class ProfessorBean extends GenericBean {
 	}
 
 	public void excluir(ActionEvent event) {
+		boolean excluiu = false;
 		try {
 			Long codigo = (Long) event.getComponent().getAttributes()
 					.get("codigo");
-			this.professor = this.professorDAO.buscar(codigo);
+			this.professor = this.professorDAO.buscarPorCodigo(codigo);
 			this.professorDAO.excluir(this.professor);
 
 			this.listar();
+			excluiu = true;
 			Messages.addGlobalInfo(Mensagens.REGISTRO_REMOVIDO);
 		} catch (ConstraintViolationException constraintViolationException) {
 			Messages.addGlobalWarn(Mensagens.REGISTRO_DEPENDENTE);
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
+		} finally {
+			RequestContext.getCurrentInstance().addCallbackParam("excluiu",
+					excluiu);
 		}
 	}
 
@@ -164,7 +169,7 @@ public class ProfessorBean extends GenericBean {
 
 			Long codigo = (Long) event.getComponent().getAttributes()
 					.get("codigo");
-			this.professor = this.professorDAO.buscar(codigo);
+			this.professor = this.professorDAO.buscarPorCodigo(codigo);
 
 			this.professor.getUsuario().setSenha(
 					Criptografia.decifrar(this.professor.getUsuario()

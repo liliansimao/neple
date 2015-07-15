@@ -71,9 +71,9 @@ public class GenericDAO<Entidade> {
 			sessao.close();
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public Entidade buscar(Long codigo) {
+	public Entidade buscarPorCodigo(Long codigo) {
 		Entidade resultado = null;
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		try {
@@ -85,7 +85,7 @@ public class GenericDAO<Entidade> {
 		}
 		return resultado;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Entidade> listar() {
 		List<Entidade> resultado = null;
@@ -100,76 +100,4 @@ public class GenericDAO<Entidade> {
 		}
 		return resultado;
 	}
-
-	// @SuppressWarnings("unchecked")
-	// public List<Entidade> buscar(Pesquisa pesquisa) {
-	// Session sessao = HibernateUtil.getSessionFactory().openSession();
-	//
-	// try {
-	// Criteria consulta = sessao.createCriteria(classe);
-	//
-	// if (pesquisa != null) {
-	// for (Filtro filtro : pesquisa.getFiltros()) {
-	// if (filtro.getOperador() == Filtro.OPERADOR_IGUAL) {
-	// consulta.add(Restrictions.eq(filtro.getPropriedade(),
-	// filtro.getValor()));
-	// } else if (filtro.getOperador() == Filtro.OPERADOR_DIFERENTE) {
-	// consulta.add(Restrictions.ne(filtro.getPropriedade(),
-	// filtro.getValor()));
-	// }
-	// }
-	//
-	// for (Ordem ordem : pesquisa.getOrdens()){
-	// if(ordem.getDescendente()){
-	// consulta.addOrder(Order.desc(ordem.getPropriedade()));
-	// }else{
-	// consulta.addOrder(Order.asc(ordem.getPropriedade()));
-	// }
-	// }
-	// }
-	//
-	// List<Entidade> resultado = consulta.list();
-	// return resultado;
-	// } catch (RuntimeException runtimeException) {
-	// throw runtimeException;
-	// } finally {
-	// sessao.close();
-	// }
-	// }
-	//
-	// @SuppressWarnings("unchecked")
-	// public Entidade buscarUnico(Pesquisa pesquisa) {
-	// Session sessao = HibernateUtil.getSessionFactory().openSession();
-	//
-	// try {
-	// Criteria consulta = sessao.createCriteria(classe);
-	//
-	// if (pesquisa != null) {
-	// for (Filtro filtro : pesquisa.getFiltros()) {
-	// if (filtro.getOperador() == Filtro.OPERADOR_IGUAL) {
-	// consulta.add(Restrictions.eq(filtro.getPropriedade(),
-	// filtro.getValor()));
-	// } else if (filtro.getOperador() == Filtro.OPERADOR_DIFERENTE) {
-	// consulta.add(Restrictions.ne(filtro.getPropriedade(),
-	// filtro.getValor()));
-	// }
-	// }
-	//
-	// for (Ordem ordem : pesquisa.getOrdens()){
-	// if(ordem.getDescendente()){
-	// consulta.addOrder(Order.desc(ordem.getPropriedade()));
-	// }else{
-	// consulta.addOrder(Order.asc(ordem.getPropriedade()));
-	// }
-	// }
-	// }
-	//
-	// Entidade resultado = (Entidade) consulta.uniqueResult();
-	// return resultado;
-	// } catch (RuntimeException runtimeException) {
-	// throw runtimeException;
-	// } finally {
-	// sessao.close();
-	// }
-	// }
 }

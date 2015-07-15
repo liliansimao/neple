@@ -1,0 +1,51 @@
+package br.com.neple.domain;
+
+import java.io.Serializable;
+
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+
+@SuppressWarnings("serial")
+@Entity
+public class Alocacao implements Serializable {
+	@EmbeddedId
+	private AlocacaoPK codigo;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(nullable = false ,insertable=false, updatable=false)
+	@NotNull(message = "O campo PROFESSOR é obrigatório")
+	private Professor professor;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(nullable = false ,insertable=false, updatable=false)
+	@NotNull(message = "O campo FATEC é obrigatório")
+	private Fatec fatec;
+	
+	public AlocacaoPK getCodigo() {
+		return codigo;
+	}
+	
+	public void setCodigo(AlocacaoPK codigo) {
+		this.codigo = codigo;
+	}
+	
+	public Professor getProfessor() {
+		return professor;
+	}
+	
+	public void setProfessor(Professor professor) {
+		this.professor = professor;
+	}
+	
+	public Fatec getFatec() {
+		return fatec;
+	}
+	
+	public void setFatec(Fatec fatec) {
+		this.fatec = fatec;
+	}
+}

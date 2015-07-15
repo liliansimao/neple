@@ -10,6 +10,8 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -29,7 +31,11 @@ public class NepleRealm extends AuthorizingRealm {
 		String email = (String) token.getPrincipal();
 
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
-		Usuario usuario = usuarioDAO.buscar(email);
+		Usuario usuario = usuarioDAO.buscarPorEmail(email);
+		
+		if(usuario == null){
+			throw new UnknownAccountException(Mensagens.USUARIO_SENHA_INVALIDOS);
+		}
 
 		if (usuario != null) {
 			String senha = usuario.getSenha();
@@ -50,7 +56,7 @@ public class NepleRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection collection) {
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
-		Usuario usuario = usuarioDAO.buscar(collection
+		Usuario usuario = usuarioDAO.buscarPorEmail(collection
 				.getPrimaryPrincipal().toString());
 		
 		Set<String> roles = new HashSet<String>();

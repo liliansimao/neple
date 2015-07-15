@@ -43,7 +43,7 @@ public class CursoBean extends GenericBean {
 	public List<Curso> getCursos() {
 		return cursos;
 	}
-
+	
 	public void setCursos(List<Curso> cursos) {
 		this.cursos = cursos;
 	}
@@ -51,7 +51,7 @@ public class CursoBean extends GenericBean {
 	public List<Fatec> getFatecs() {
 		return fatecs;
 	}
-
+	
 	public void setFatecs(List<Fatec> fatecs) {
 		this.fatecs = fatecs;
 	}
@@ -65,11 +65,11 @@ public class CursoBean extends GenericBean {
 	public void novo() {
 		try {
 			this.acao = Acao.NOVO;
-			
+
 			this.curso = new Curso();
 			this.curso.setAtivo(Boolean.TRUE);
 			this.curso.setPeriodo(Periodo.MATUTINO.getSigla());
-			
+
 			this.fatecs = fatecDAO.listar();
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
@@ -82,7 +82,7 @@ public class CursoBean extends GenericBean {
 			this.acao = Acao.EDITAR;
 			Long codigo = (Long) event.getComponent().getAttributes()
 					.get("codigo");
-			this.curso = cursoDAO.buscar(codigo);
+			this.curso = cursoDAO.buscarPorCodigo(codigo);
 			this.fatecs = fatecDAO.listar();
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
@@ -124,19 +124,24 @@ public class CursoBean extends GenericBean {
 	}
 
 	public void excluir(ActionEvent event) {
+		boolean excluiu = false;
 		try {
 			Long codigo = (Long) event.getComponent().getAttributes()
 					.get("codigo");
-			this.curso = this.cursoDAO.buscar(codigo);
+			this.curso = this.cursoDAO.buscarPorCodigo(codigo);
 			this.cursoDAO.excluir(this.curso);
 
 			this.listar();
+			excluiu = true;
 			Messages.addGlobalInfo(Mensagens.REGISTRO_REMOVIDO);
 		} catch (ConstraintViolationException constraintViolationException) {
 			Messages.addGlobalWarn(Mensagens.REGISTRO_DEPENDENTE);
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
-		} 
+		} finally {
+			RequestContext.getCurrentInstance().addCallbackParam("excluiu",
+					excluiu);
+		}
 	}
 }

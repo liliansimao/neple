@@ -7,14 +7,13 @@
 	<!-- Repositório de Mensagens -->
 	<application>
 		<resource-bundle>
-			<base-name>br.com.neple.messages.messages</base-name>
+			<base-name>br.com.neple.messages.mensagens</base-name>
 			<var>msgs</var>
 		</resource-bundle>
 		<locale-config>
 			<default-locale>pt_BR</default-locale>
 			<supported-locale>en_US</supported-locale>
 		</locale-config>
-		<message-bundle>br.com.neple.messages.messages</message-bundle>
 	</application>
 
 	<!-- Limpa a marcação dos campos da tela quando da erro de validação -->

@@ -15,7 +15,7 @@ import org.primefaces.context.RequestContext;
 import br.com.neple.dao.FatecDAO;
 import br.com.neple.domain.Fatec;
 import br.com.neple.enumeracao.Acao;
-import br.com.neple.util.Mensagens;
+import br.com.neple.util.Funcoes;
 
 @SuppressWarnings("serial")
 @Named
@@ -37,7 +37,7 @@ public class FatecBean extends GenericBean {
 	public List<Fatec> getFatecs() {
 		return fatecs;
 	}
-
+	
 	public void setFatecs(List<Fatec> fatecs) {
 		this.fatecs = fatecs;
 	}
@@ -57,7 +57,7 @@ public class FatecBean extends GenericBean {
 			this.acao = Acao.EDITAR;
 			Long codigo = (Long) event.getComponent().getAttributes()
 					.get("codigo");
-			this.fatec = this.fatecDAO.buscar(codigo);
+			this.fatec = this.fatecDAO.buscarPorCodigo(codigo);
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
@@ -85,9 +85,9 @@ public class FatecBean extends GenericBean {
 
 			this.listar();
 			salvou = true;
-			Messages.addGlobalInfo(Mensagens.REGISTRO_SALVO);
+			Messages.addGlobalInfo(Funcoes.getMessage("registroSalvo"));
 		} catch (ConstraintViolationException constraintViolationException) {
-			Messages.addGlobalWarn(Mensagens.REGISTRO_UNICO);
+			Messages.addGlobalWarn(Funcoes.getMessage("registroUnico"));
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
@@ -98,19 +98,24 @@ public class FatecBean extends GenericBean {
 	}
 
 	public void excluir(ActionEvent event) {
+		boolean excluiu = Boolean.FALSE;
 		try {
 			Long codigo = (Long) event.getComponent().getAttributes()
 					.get("codigo");
-			this.fatec = this.fatecDAO.buscar(codigo);
+			this.fatec = this.fatecDAO.buscarPorCodigo(codigo);
 			this.fatecDAO.excluir(this.fatec);
 
 			this.listar();
-			Messages.addGlobalInfo(Mensagens.REGISTRO_REMOVIDO);
+			excluiu = Boolean.TRUE;
+			Messages.addGlobalInfo(Funcoes.getMessage("registroRemovido"));
 		} catch (ConstraintViolationException constraintViolationException) {
-			Messages.addGlobalWarn(Mensagens.REGISTRO_DEPENDENTE);
+			Messages.addGlobalWarn(Funcoes.getMessage("registroDependente"));
 		} catch (RuntimeException runtimeException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(runtimeException));
+		} finally {
+			RequestContext.getCurrentInstance().addCallbackParam("excluiu",
+					excluiu);
 		}
 	}
 }

@@ -76,13 +76,13 @@ public class ProfessorDAO extends GenericDAO<Professor> {
 		List<Professor> resultado = null;
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		try {
-			Criteria consulta = sessao.createCriteria(Professor.class);
-			consulta.createAlias("usuario", "u");
-			consulta.createAlias("u.fatec", "f");
-			consulta.add(Restrictions.eq("u.tipoUsuario",
+			Criteria consulta = sessao.createCriteria(Professor.class, "professor");
+			consulta.createAlias("professor.usuario", "usuario");
+			consulta.createAlias("usuario.fatec", "fatec");
+			consulta.add(Restrictions.eq("usuario.tipoUsuario",
 					TipoUsuario.PROFESSOR.getSigla()));
-			consulta.addOrder(Order.asc("u.nome"));
-			consulta.addOrder(Order.asc("f.nome"));
+			consulta.addOrder(Order.asc("usuario.nome"));
+			consulta.addOrder(Order.asc("fatec.nome"));
 			resultado = consulta.list();
 		} catch (RuntimeException runtimeException) {
 			throw runtimeException;
@@ -93,13 +93,13 @@ public class ProfessorDAO extends GenericDAO<Professor> {
 	}
 
 	@Override
-	public Professor buscar(Long codigo) {
+	public Professor buscarPorCodigo(Long codigo) {
 		Professor resultado = null;
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		try {
-			Criteria consulta = sessao.createCriteria(Professor.class);
-			consulta.createAlias("usuario", "u");
-			consulta.createAlias("u.fatec", "f");
+			Criteria consulta = sessao.createCriteria(Professor.class, "professor");
+			consulta.createAlias("professor.usuario", "usuario");
+			consulta.createAlias("usuario.fatec", "fatec");
 			consulta.add(Restrictions.idEq(codigo));
 			resultado = (Professor) consulta.uniqueResult();
 		} catch (RuntimeException runtimeException) {
@@ -110,14 +110,14 @@ public class ProfessorDAO extends GenericDAO<Professor> {
 		return resultado;
 	}
 	
-	public Professor buscar(String email) {
+	public Professor buscarPorEmail(String email) {
 		Professor resultado = null;
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		try {
-			Criteria consulta = sessao.createCriteria(Professor.class);
-			consulta.createAlias("usuario", "u");
-			consulta.createAlias("u.fatec", "f");
-			consulta.add(Restrictions.eq("u.email", email));
+			Criteria consulta = sessao.createCriteria(Professor.class, "professor");
+			consulta.createAlias("professor.usuario", "usuario");
+			consulta.createAlias("usuario.fatec", "fatec");
+			consulta.add(Restrictions.eq("usuario.email", email));
 			resultado = (Professor) consulta.uniqueResult();
 		} catch (RuntimeException runtimeException) {
 			throw runtimeException;

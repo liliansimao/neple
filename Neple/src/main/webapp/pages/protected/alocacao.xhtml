@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="/WEB-INF/templates/modeloProtected.xhtml">
+
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewAction action="#{alocacaoBean.listar}" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmPesquisa">
+			<p:dataTable id="tblPesquisa" widgetVar="wvTblPesquisa"
+				value="#{alocacaoBean.alocacoes}" var="alocacao" paginator="true" rows="7"
+				emptyMessage="Nenhum registro encontrado."
+				tableStyle="table-layout: auto;">
+				<p:column headerText="Professor" filterBy="#{alocacao.codigo.professor.usuario.nome}"
+					sortBy="#{alocacao.codigo.professor.usuario.nome}">
+					#{alocacao.codigo.professor.usuario.nome}
+				</p:column>
+				
+				<p:column headerText="Fatec" filterBy="#{alocacao.codigo.fatec.nome}"
+					sortBy="#{alocacao.codigo.fatec.nome}">
+					#{alocacao.codigo.fatec.nome}
+				</p:column>
+
+				<p:column headerText="Opções" style="text-align: center;">
+					<p:commandButton icon="ui-icon-trash"
+						actionListener="#{alocacaoBean.excluir}"
+						update=":msgGlobal :frmPesquisa:tblPesquisa"
+						oncomplete="manipularPedidoExcluir(xhr, status, args);">
+						<f:attribute name="codigo" value="#{alocacao.codigo}" />
+						<p:confirm header="Confirmação"
+							message="Deseja excluir a alocação selecionada?"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+					<p:commandButton icon="ui-icon-pencil"
+						actionListener="#{alocacaoBean.editar}"
+						oncomplete="PF('dlgCadastro').show();"
+						update=":frmCadastro:pnlCadastro">
+						<f:attribute name="codigo" value="#{alocacao.codigo}" />
+					</p:commandButton>
+				</p:column>
+
+				<f:facet name="header">
+					<p:commandButton value="Novo" actionListener="#{alocacaoBean.novo}"
+						icon="ui-icon-plus" oncomplete="PF('dlgCadastro').show();"
+						update=":frmCadastro:pnlCadastro" />
+				</f:facet>
+			</p:dataTable>
+
+			<p:confirmDialog id="dlgConfirmacao" global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check">
+				</p:commandButton>
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+
+		<p:dialog widgetVar="dlgCadastro" modal="true" appendTo="@(body)"
+			closable="true" draggable="false" resizable="false"
+			header="Curso - Cadastro">
+			<h:form id="frmCadastro">
+				<h:panelGrid id="pnlCadastro" columns="2">
+					<p:outputLabel value="Professor: *" />
+					<p:selectOneMenu value="#{alocacaoBean.alocacao.codigo.professor}"
+						converter="omnifaces.SelectItemsConverter" filter="true"
+						filterMatchMode="contains">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione um Professor" />
+						<f:selectItems value="#{alocacaoBean.professores}" var="professor"
+							itemValue="#{professor}" itemLabel="#{professor.usuario.nome}" />
+					</p:selectOneMenu>
+					
+					<p:outputLabel value="Fatec: *" />
+					<p:selectOneMenu value="#{alocacaoBean.alocacao.codigo.fatec}"
+						converter="omnifaces.SelectItemsConverter" filter="true"
+						filterMatchMode="contains">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione uma Fatec" />
+						<f:selectItems value="#{alocacaoBean.fatecs}" var="fatec"
+							itemValue="#{fatec}" itemLabel="#{fatec.nome}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+
+				<p:separator />
+				<h:panelGrid columns="1">
+					<p:commandButton value="Salvar"
+						actionListener="#{alocacaoBean.salvar}"
+						update=":msgGlobal :frmCadastro:pnlCadastro :frmPesquisa:tblPesquisa"
+						icon="ui-icon-disk"
+						oncomplete="manipularPedidoSalvar(xhr, status, args)">
+					</p:commandButton>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

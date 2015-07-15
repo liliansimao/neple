@@ -30,9 +30,6 @@ public class Curso extends GenericDomain {
 	@Basic(optional = false)
 	@NotNull(message = "O campo PERÍODO é obrigatório")
 	private Character periodo;
-	
-	@Transient
-	private String periodoPorExtenso;
 
 	@Basic(optional = false)
 	@NotNull(message = "O campo NÚMERO DE VAGAS é obrigatório")
@@ -134,12 +131,10 @@ public class Curso extends GenericDomain {
 	public void setFatec(Fatec fatec) {
 		this.fatec = fatec;
 	}
-	
-	public void setPeriodoPorExtenso(String periodoPorExtenso) {
-		this.periodoPorExtenso = periodoPorExtenso;
-	}
-	
-	public String getPeriodoPorExtenso(){
-		return Periodo.getValue(this.periodo).getDescricao();
+
+	@Transient
+	public String getPeriodoPorExtenso() {
+		return this.periodo == null ? "" : Periodo.getValue(this.periodo)
+				.getDescricao();
 	}
 }

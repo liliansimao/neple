@@ -35,11 +35,11 @@
 		<property name="hbm2ddl.auto">update</property>
 
 		<!-- Classes mapeadas -->	
+		<mapping class="br.com.neple.domain.Alocacao" />
 		<mapping class="br.com.neple.domain.Aluno" />
 		<mapping class="br.com.neple.domain.Curso" />
 		<mapping class="br.com.neple.domain.Fatec" />
 		<mapping class="br.com.neple.domain.Professor" />
-		<mapping class="br.com.neple.domain.ProfessorFatec" />
 		<mapping class="br.com.neple.domain.Usuario" />
 	</session-factory>
 </hibernate-configuration>

@@ -9,33 +9,50 @@ import br.com.neple.enumeracao.Acao;
 import br.com.neple.enumeracao.TipoUsuario;
 
 @SuppressWarnings("serial")
-public class GenericBean implements
-		Serializable {
+public class GenericBean implements Serializable {
 	protected Acao acao;
-	
+
 	public Acao getAcao() {
 		return acao;
 	}
-	
+
 	public void setAcao(Acao acao) {
 		this.acao = acao;
 	}
 	
-	public boolean ehAdministrador(){
+	public boolean ehAdministrador() {
 		Subject usuario = SecurityUtils.getSubject();
-		boolean ehAdministrador = usuario.hasRole(TipoUsuario.ADMINISTRADOR.getDescricao());
+		boolean ehAdministrador = usuario.hasRole(TipoUsuario.ADMINISTRADOR
+				.getDescricao());
 		return ehAdministrador;
 	}
-	
-	public boolean ehProfessor(){
+
+	public boolean ehProfessor() {
 		Subject usuario = SecurityUtils.getSubject();
-		boolean ehProfessor = usuario.hasRole(TipoUsuario.PROFESSOR.getDescricao());
+		boolean ehProfessor = usuario.hasRole(TipoUsuario.PROFESSOR
+				.getDescricao());
 		return ehProfessor;
 	}
-	
-	public boolean ehAluno(){
+
+	public boolean ehAluno() {
 		Subject usuario = SecurityUtils.getSubject();
 		boolean ehAluno = usuario.hasRole(TipoUsuario.ALUNO.getDescricao());
 		return ehAluno;
+	}
+
+	public boolean ehAdministradorOuProfessor() {
+		Subject usuario = SecurityUtils.getSubject();
+		boolean ehAdministrador = usuario.hasRole(TipoUsuario.ADMINISTRADOR
+				.getDescricao())
+				|| usuario.hasRole(TipoUsuario.PROFESSOR.getDescricao());
+		return ehAdministrador;
+	}
+	
+	public boolean ehAdministradorOuAluno() {
+		Subject usuario = SecurityUtils.getSubject();
+		boolean ehAdministrador = usuario.hasRole(TipoUsuario.ADMINISTRADOR
+				.getDescricao())
+				|| usuario.hasRole(TipoUsuario.ALUNO.getDescricao());
+		return ehAdministrador;
 	}
 }

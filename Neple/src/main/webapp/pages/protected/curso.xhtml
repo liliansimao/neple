@@ -16,8 +16,14 @@
 
 	<ui:define name="conteudo">
 		<h:form id="frmPesquisa">
+			<p:toolbar style="height: 25px; margin-bottom: 5px;">
+				<p:toolbarGroup>
+					<h:outputText value="Curso - Listagem" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
 			<p:dataTable id="tblPesquisa" widgetVar="wvTblPesquisa"
-				value="#{cursoBean.cursos}" var="curso" paginator="true" rows="7"
+				value="#{cursoBean.cursos}" var="curso" paginator="true" rows="5"
 				emptyMessage="Nenhum registro encontrado."
 				tableStyle="table-layout: auto;">
 				<p:column headerText="Fatec" filterBy="#{curso.fatec.nome}"
@@ -32,7 +38,7 @@
 
 				<p:column headerText="Período" filterBy="#{curso.periodo}"
 					sortBy="#{curso.periodo}" style="text-align: center;">
-					#{curso.periodo}
+					#{curso.periodoPorExtenso}
 				</p:column>
 
 				<p:column headerText="Opções" style="text-align: center;">

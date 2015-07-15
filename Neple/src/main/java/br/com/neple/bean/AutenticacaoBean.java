@@ -16,6 +16,7 @@ import org.omnifaces.util.Messages;
 
 import br.com.neple.domain.Usuario;
 import br.com.neple.util.Criptografia;
+import br.com.neple.util.Funcoes;
 
 @SuppressWarnings("serial")
 @Named
@@ -35,15 +36,18 @@ public class AutenticacaoBean implements Serializable {
 	}
 
 	public void autenticar() {
-		UsernamePasswordToken token = new UsernamePasswordToken(
-				usuario.getEmail(), Criptografia.cifrar(usuario.getSenha()));
-
-		Subject currentUser = SecurityUtils.getSubject();
 		try {
+			UsernamePasswordToken token = new UsernamePasswordToken(
+					usuario.getEmail(),
+					Criptografia.cifrar(usuario.getSenha()), Boolean.FALSE,
+					Funcoes.getIP());
+
+			Subject currentUser = SecurityUtils.getSubject();
 			currentUser.login(token);
+
 			Faces.redirect("principal");
 		} catch (AuthenticationException authenticationException) {
-			Messages.addGlobalWarn("Usuário e/ou senha inválido(s)");
+			Messages.addGlobalWarn(authenticationException.getMessage());
 		} catch (IOException ioException) {
 			Messages.addGlobalError(ExceptionUtils
 					.getRootCauseMessage(ioException));
