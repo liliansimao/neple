@@ -9,7 +9,7 @@
 
 	<!-- Página Inicial -->
 	<welcome-file-list>
-		<welcome-file>pretty:autenticacao</welcome-file>
+		<welcome-file>index.xhtml</welcome-file>
 	</welcome-file-list>
 
 	<!-- Configuração do JavaServer Faces -->
